@@ -1,7 +1,9 @@
 const firebase = require('firebase');
 const express = require('express');
+const path = require('path');
 const app = express();
-const port = 3000;
+
+var indexRouter = require('./routes/index');
 
 // Initialize Firebase
 var config = {
@@ -14,7 +16,6 @@ var config = {
 };
 
 firebase.initializeApp(config);
-
 var database = firebase.firestore();
 
 app.use(express.static("public"));
@@ -25,9 +26,17 @@ app.set('view engine', 'ejs');
 // use res.render to load up an ejs view file
 app.set('views', __dirname + '/views');
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.use('/', indexRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
 });
 
+// error handler
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500 );
+  res.render('error', { title: 'Not Found' }); // error.hbs file is rendered
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+module.exports = app;

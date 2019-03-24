@@ -4,7 +4,7 @@
   "description": "Project TTCNPM-182-20",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node bin/www"
   },
   "dependencies": {
     "ejs": "^2.6.1",
