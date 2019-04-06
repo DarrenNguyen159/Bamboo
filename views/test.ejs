@@ -43,30 +43,14 @@
 
     <script>
         var $jq = jQuery.noConflict();
-        $jq(document).ready(function() {
-            $jq.ajax({
-                type: 'GET',
-                url: '/test',
-                dataType: 'text',
-                success: function(data) {
-                    var timerText = data.timer;
-                    $("#timer").text(timerText);
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
-                }
-            }) // End of AJAX
-        });
-        var i = 0;
         setInterval(function() {
             $jq.ajax({
                 type: 'GET',
                 url: '/test',
                 dataType: 'text',
                 success: function(data) {
-                    var timerJSON = $jq.parseJSON(data);
-                    $jq("#timer").text(timerJSON.timer);
+                    var roomJSON = $jq.parseJSON(data);
+                    $jq("#timer").text(roomJSON.room.timer);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);

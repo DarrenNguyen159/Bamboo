@@ -1,25 +1,11 @@
-const firebase = require('firebase');
 const express = require('express');
 const path = require('path');
 const app = express();
 
+var database = require('./routes/database');
+
 var indexRouter = require('./routes/index');
 var testPage = require('./routes/testPage');
-
-
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyBKheAnyvSFQtaMUwlaQ_7T-q5-Z9hmuQc",
-    authDomain: "bamboo-cda5f.firebaseapp.com",
-    databaseURL: "https://bamboo-cda5f.firebaseio.com",
-    projectId: "bamboo-cda5f",
-    storageBucket: "bamboo-cda5f.appspot.com",
-    messagingSenderId: "550416420066"
-};
-
-firebase.initializeApp(config);
-// Get a reference to the database service
-var database = firebase.database();
 
 app.use(express.static("public"));
 
@@ -30,24 +16,12 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 // TEST: Getting data on realtime database
-app.get('/test', function (req, res) { 
-  console.log("req test");
+app.get('/test', function (req, res) {
   database.ref('/Rooms/r001').once('value').then(function(snapshot) {
     var data = snapshot.val();
-    console.log(data.players);
-    res.send({timer: data.timer});
+    res.send({room: data});
   });
 });
-
-// app.get('/testPage', function(req, res) {
-//   database.ref('/Rooms/r001').once('value').then(function(snapshot) {
-//     var data = snapshot.val();
-//     // console.log(data.players);
-//     res.render('test', {room: data});
-//   });
-// });
-
-
 
 app.use('/', indexRouter);
 
