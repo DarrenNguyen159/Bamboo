@@ -16,7 +16,8 @@ var config = {
 };
 
 firebase.initializeApp(config);
-var database = firebase.firestore();
+// Get a reference to the database service
+var database = firebase.database();
 
 app.use(express.static("public"));
 
@@ -25,6 +26,24 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 app.set('views', __dirname + '/views');
+
+// TEST: Getting data on realtime database
+app.get('/test', function (req, res) { 
+  console.log("req test");
+  database.ref('/Rooms/r001').once('value').then(function(snapshot) {
+    var data = snapshot.val();
+    console.log(data.players);
+    res.send({timer: data.timer});
+  });
+});
+
+app.get('/testPage', function(req, res) {
+  database.ref('/Rooms/r001').once('value').then(function(snapshot) {
+    var data = snapshot.val();
+    // console.log(data.players);
+    res.render('test', {room: data});
+  });
+});
 
 app.use('/', indexRouter);
 
