@@ -4,6 +4,8 @@ const path = require('path');
 const app = express();
 
 var indexRouter = require('./routes/index');
+var testPage = require('./routes/testPage');
+
 
 // Initialize Firebase
 var config = {
@@ -37,15 +39,19 @@ app.get('/test', function (req, res) {
   });
 });
 
-app.get('/testPage', function(req, res) {
-  database.ref('/Rooms/r001').once('value').then(function(snapshot) {
-    var data = snapshot.val();
-    // console.log(data.players);
-    res.render('test', {room: data});
-  });
-});
+// app.get('/testPage', function(req, res) {
+//   database.ref('/Rooms/r001').once('value').then(function(snapshot) {
+//     var data = snapshot.val();
+//     // console.log(data.players);
+//     res.render('test', {room: data});
+//   });
+// });
+
+
 
 app.use('/', indexRouter);
+
+app.use('/testPage', testPage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
