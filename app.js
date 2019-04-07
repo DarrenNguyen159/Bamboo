@@ -35,6 +35,7 @@ app.get('/newlobby', function(req, res) {
 
 app.get('/lobby/:id', function(req, res) {
   var id = req.params['id'];
+  database.ref('/Rooms/' + id).set({status: 'lobby'});
   res.render('lobby', {lobbyID: id});
 });
 
