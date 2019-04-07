@@ -8,39 +8,14 @@
         <link rel="stylesheet" type="text/css" href="/style/index.css">
     </head>
     <body>
-    
-    <div class="container-fluid">
-        <div class="center">
-            <h1 class="logo">Bamboo!</h1>
-            <div class="enterInput">
-                <div class="row">
-                    <input class="roomIDInput" type="number" name="roomID" value="" placeholder="Enter Room ID">
-                </div>
-                
-                <div class="row">
-                    <button class="ButtonEnter">Enter</button>
-                </div>
-                <br />
-                <div class="row">
-                    <span class="centering">or</span>
-                </div>
-                <br />
-                <div class="row">
-                    <button class="ButtonEnter" onclick="createLobby()">Create a lobby</button>
-                </div>
-            </div>
-        </div>
+
+    <div class="container">
+        <p>Lobby ID: <span id="roomID"> <%= lobbyID %> </span></p>
     </div>
 
     <div class="footer">
         <a href="#">Terms & Privacy</a>
     </div>
-
-    <script>
-        function createLobby(){
-            window.location.href = '/newlobby'; // redirect to lobby
-        }
-    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
