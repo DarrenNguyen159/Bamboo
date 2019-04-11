@@ -1,15 +1,12 @@
-const firebase = require('firebase');
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyBKheAnyvSFQtaMUwlaQ_7T-q5-Z9hmuQc",
-    authDomain: "bamboo-cda5f.firebaseapp.com",
-    databaseURL: "https://bamboo-cda5f.firebaseio.com",
-    projectId: "bamboo-cda5f",
-    storageBucket: "bamboo-cda5f.appspot.com",
-    messagingSenderId: "550416420066"
-  };
-  firebase.initializeApp(config);
+const admin = require('firebase-admin');
 
-  var firestore = firebase.firestore();
+var serviceAccount = require('../Credential/serviceAccountKey.json');
 
-  module.exports = firestore;
+console.log('[DEBUG] serviceAccount: ');
+console.log(serviceAccount);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+module.exports = admin.firestore();

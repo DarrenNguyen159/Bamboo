@@ -7,9 +7,9 @@ var config = {
     projectId: "bamboo-cda5f",
     storageBucket: "bamboo-cda5f.appspot.com",
     messagingSenderId: "550416420066"
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
 
-  var database = firebase.database();
+var database = firebase.database();
 
-  module.exports = database;
+module.exports = database;

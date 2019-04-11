@@ -1,12 +1,19 @@
+// app.js 
+
+
+// set up
+// ==================================================
+
 const express = require('express');
 const path = require('path');
 const app = express();
+const bodyParser = require('body-parser');
 
 var database = require('./routes/database');
 
-var indexRouter = require('./routes/index');
-var testPage = require('./routes/testPage');
 
+// set up our express application 
+// =======================================================================
 app.use(express.static("public"));
 
 // set the view engine to ejs
@@ -14,6 +21,15 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 app.set('views', __dirname + '/views');
+
+// parse application/x-www-form-urlencoded 
+app.use(bodyParser.urlencoded({extended:true}));
+
+// parse application/json 
+app.use(bodyParser.json());
+
+
+// ----------------------- CONFIGURATION --------------------------------------//
 
 // TEST: Getting data on realtime database
 app.get('/test', function (req, res) {
@@ -23,9 +39,10 @@ app.get('/test', function (req, res) {
   });
 });
 
-app.use('/', indexRouter);
-
-app.use('/testPage', testPage);
+// router files 
+app.use('/', require('./routes/index'));
+app.use('/testPage', require('./routes/testPage'));
+app.use('/authen', require('./routes/authen'));
 
 var lobbyCreator = require('./scripts/createLobby');
 app.get('/newlobby', function(req, res) {
@@ -38,6 +55,18 @@ app.get('/lobby/:id', function(req, res) {
   database.ref('/Rooms/' + id).set({status: 'lobby'});
   res.render('lobby', {lobbyID: id});
 });
+
+// app.get('/authen', function(req,res){
+//   res.render('login', {});
+// });
+
+
+
+
+
+
+// ----------------------- END OF CONFIGURATION --------------------------------//
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
