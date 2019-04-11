@@ -9,9 +9,6 @@ const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 
-var database = require('./routes/database');
-
-
 // set up our express application 
 // =======================================================================
 app.use(express.static("public"));
@@ -19,6 +16,7 @@ app.use(express.static("public"));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
+// Routes
 // use res.render to load up an ejs view file
 app.set('views', __dirname + '/views');
 
@@ -43,18 +41,22 @@ app.get('/test', function (req, res) {
 app.use('/', require('./routes/index'));
 app.use('/testPage', require('./routes/testPage'));
 app.use('/authen', require('./routes/authen'));
+app.use('/lobby', require('./routes/lobby'));
 
-var lobbyCreator = require('./scripts/createLobby');
-app.get('/newlobby', function(req, res) {
-  // var ID = (Math.floor(Math.random() * 1001)).toString();
-  lobbyCreator.createLobby(database ,res);
-});
+// API
+app.use('/test', require('./api/test'));
 
-app.get('/lobby/:id', function(req, res) {
-  var id = req.params['id'];
-  database.ref('/Rooms/' + id).set({status: 'lobby'});
-  res.render('lobby', {lobbyID: id});
-});
+// var lobbyCreator = require('./scripts/createLobby');
+// app.get('/newlobby', function(req, res) {
+//   // var ID = (Math.floor(Math.random() * 1001)).toString();
+//   lobbyCreator.createLobby(database ,res);
+// });
+
+// app.get('/lobby/:id', function(req, res) {
+//   var id = req.params['id'];
+//   database.ref('/Rooms/' + id).set({status: 'lobby'});
+//   res.render('lobby', {lobbyID: id});
+// });
 
 // app.get('/authen', function(req,res){
 //   res.render('login', {});
