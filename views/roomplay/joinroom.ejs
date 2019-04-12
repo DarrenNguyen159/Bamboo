@@ -12,9 +12,12 @@
     <div class="container-fluid">
         <div class="center">
             <h1 class="logo">Bamboo!</h1>
+            <div class="row">
+                <span> Room ID : <%= roomID%></span>
+            </div>
             <div class="enterInput">
                 <div class="row">
-                    <input class="roomIDInput" type="number" name="roomID" value="" placeholder="Enter Room ID" id="roomID">
+                    <input class="roomIDInput" type="text" name="roomID" value="" placeholder="Your Nickname" id="nickName">
                 </div>
                 
                 <div class="row">
@@ -24,12 +27,14 @@
                 <div class="row">
                     <span class="centering" ><%=message%></span>
                 </div>
-                <div class="row">
-                    <span class="centering">or</span>
-                </div>
-                <br />
-                <div class="row">
-                    <button class="ButtonEnter" onclick="createLobby()">Create a lobby</button>
+                <div id='userLoggedIn' style="display:None">
+                    <div class="row">
+                        <span class="centering">or</span>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <button class="ButtonEnter" id='userIdentity' onclick="enterRoomWithLoggedInUser()">Continue as </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,7 +51,20 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
 
+    <script src="/javascript/config.js"></script>
     <script>
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user && !user.isAnonymous) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var uid = user.uid;
+                document.getElementById('userIdentity').innerText = 'Continue as '+displayName;
+                document.getElementById('userLoggedIn').style.display='';
+            } else {
+
+            }
+        });
 
         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
@@ -72,48 +90,77 @@
             form.submit();
         }
 
+        const roomID = '<%= roomID%>';
+        console.log('[DEBUG] room ID = '+ roomID);
+
         function enterRoom(){    
 
-            var roomID = document.getElementById('roomID').value;
+            // var roomID = document.getElementById('roomID').value;
+            var nickName = document.getElementById('nickName').value;
             var theUrl = window.location.href+'authen/checkRoom';
 
             console.log('[DEBUG] roomID = '+roomID);
             console.log('[DEBUG] link = '+theUrl);
 
-            // var data = new FormData();
-            // data.append('roomID', roomID);
+            // Sign out 
+            firebase.auth().signOut().then(function() {
+                console.log('Signed Out');
+            }, function(error) {
+                console.error('Sign Out Error', error);
+            });
 
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', window.location.href+'/authen/checkRoom');
-            // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xhr.onload = function () {
-            //     // do something to response
-            //     console.log(this.responseText);
-            // };
-            // xhr.send(data);
+            // Log in anonymous
+            firebase.auth().signInAnonymously().catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              console.log('[ERROR] Sign in error !');
+              // ...
+            });
 
-            // send ok, render not ok - bugs
-            // var xmlHttp = new XMLHttpRequest();
-            // xmlHttp.onreadystatechange = function() {
-            //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            //     {
-            //         console.log('[DEBUG] responseText : ');
-            //         console.log(xmlHttp.responseText);
-            //         callback(xmlHttp.responseText);
-            //     }
-            // }
-            // xmlHttp.open("POST", theUrl, true); // true for asynchronous
-            // xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xmlHttp.send('roomID='+roomID);
+            // Check user 
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var uid = user.id;
+                    var isAnonymous = user.isAnonymous;
 
-            // form submit 
-            post('/authen/checkRoom', {roomID: roomID});
+                    // form submit 
+                    post('/authen/setNickName', {roomID: roomID, name: nickName, uid: uid});
+                } else {
+
+                }
+            });
+
 
         }
 
-        function createLobby(){
-            window.location.href = '/lobby'; // redirect to lobby
+        function enterRoomWithLoggedInUser(){
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user && !user.isAnonymous) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var uid = 'anonymous';
+
+
+                    var theUrl = window.location.href+'authen/checkRoom';
+
+                    console.log('[DEBUG] roomID = '+roomID);
+                    console.log('[DEBUG] link = '+theUrl);
+
+                    // form submit 
+                    post('/authen/setNickName', {roomID: roomID, name: displayName, uid: uid});
+
+                    
+                } else {
+
+                }
+            });
+
         }
+
     </script>
 
     <!-- Bootstrap JS -->
