@@ -24,6 +24,8 @@ router.post('/', function(req,res, next){
           if(data[k].name == req.body.username && 
              data[k].password == req.body.password){
             isExist = true;
+            // Save user session
+            
             break;
           }
         }

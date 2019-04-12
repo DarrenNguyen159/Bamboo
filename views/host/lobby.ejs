@@ -12,6 +12,14 @@
     <div class="container">
         <nav class="navbar navbar-light bg-light">
             <p>Lobby ID: <span id="roomID"> <%= lobbyID%> </span></p>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <p >Host: <span id="hostname"> hostname </span></p>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-dark" onclick="signOut()">Sign out</button>
+                </li>
+            </ul>
         </nav>
     </div>
 
@@ -23,6 +31,44 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
+
+    <script src="/javascript/config.js"></script>
+    <script>
+        // Check user signed-in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+
+                // change hostname to displayName
+                $("#hostname").text(displayName);
+            // ...
+            } else {
+                // User is signed out.
+                alert("You have not signed-in yet :(");
+                // Redirect to authen
+                window.location.href = '/authen';
+            // ...
+            }
+        });
+
+        function signOut() {
+            firebase.auth().signOut().then(function() {
+                console.log('Signed Out');
+            }, function(error) {
+                console.error('Sign Out Error', error);
+            });
+        }
+
+    </script>
 
     </body>
 </html>
