@@ -14,16 +14,16 @@
             <h1 class="logo">Bamboo!</h1>
             <div class="enterInput">
                 <div class="row">
+                    <span class="centering" style="color:#ff0000" id="message"><%=message%></span>
+                </div>
+                <div class="row">
                     <input class="roomIDInput" type="number" name="roomID" value="" placeholder="Enter Room ID" id="roomID">
                 </div>
-                
+                <br>
                 <div class="row">
                     <button class="ButtonEnter" onclick="enterRoom()">Enter</button>
                 </div>
                 <br />
-                <div class="row">
-                    <span class="centering" ><%=message%></span>
-                </div>
                 <div class="row">
                     <span class="centering">or</span>
                 </div>
@@ -46,71 +46,40 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
 
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
     <script>
-
-        function post(path, params, method) {
-            method = method || "post"; // Set method to post by default if not specified.
-
-            // The rest of this code assumes you are not using a library.
-            // It can be made less wordy if you use one.
-            var form = document.createElement("form");
-            form.setAttribute("method", method);
-            form.setAttribute("action", path);
-
-            for(var key in params) {
-                if(params.hasOwnProperty(key)) {
-                    var hiddenField = document.createElement("input");
-                    hiddenField.setAttribute("type", "hidden");
-                    hiddenField.setAttribute("name", key);
-                    hiddenField.setAttribute("value", params[key]);
-
-                    form.appendChild(hiddenField);
-                }
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-
+        var $jq = jQuery.noConflict();
         function enterRoom(){    
-
             var roomID = document.getElementById('roomID').value;
-            var theUrl = window.location.href+'authen/checkRoom';
-
-            console.log('[DEBUG] roomID = '+roomID);
-            console.log('[DEBUG] link = '+theUrl);
-
-            // var data = new FormData();
-            // data.append('roomID', roomID);
-
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', window.location.href+'/authen/checkRoom');
-            // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xhr.onload = function () {
-            //     // do something to response
-            //     console.log(this.responseText);
-            // };
-            // xhr.send(data);
-
-            // send ok, render not ok - bugs
-            // var xmlHttp = new XMLHttpRequest();
-            // xmlHttp.onreadystatechange = function() {
-            //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            //     {
-            //         console.log('[DEBUG] responseText : ');
-            //         console.log(xmlHttp.responseText);
-            //         callback(xmlHttp.responseText);
-            //     }
-            // }
-            // xmlHttp.open("POST", theUrl, true); // true for asynchronous
-            // xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xmlHttp.send('roomID='+roomID);
-
-            // form submit 
-            post('/authen/checkRoom', {roomID: roomID});
-
+            console.log('[SENT]'+ roomID);
+            $jq.ajax({
+                type: 'POST',
+                url: '/roomplay/checkRoom',
+                dataType: 'json',
+                data: {roomID: roomID},
+                success: function(data) {
+                    // var roomJSON = $jq.parseJSON(data);
+                    console.log(data.statusRoom);
+                    // statusRoom = 1 if room existed, otherwise 0 
+                    if(data.statusRoom){
+                        window.location.href='/roomplay/joinroom?roomID='+roomID;
+                    }else{
+                        document.getElementById('message').innerHTML = 'Room not found!';
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    // alert(xhr.status);
+                    // alert(thrownError);
+                }
+            });
         }
-
         function createLobby(){
             window.location.href = '/authen'; // redirect to lobby
         }

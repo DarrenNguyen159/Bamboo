@@ -8,6 +8,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // set up our express application 
 // =======================================================================
@@ -26,6 +27,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 // parse application/json 
 app.use(bodyParser.json());
 
+// use cookie parser 
+app.use(cookieParser());
+
 
 // ----------------------- CONFIGURATION --------------------------------------//
 
@@ -42,6 +46,7 @@ app.use('/', require('./routes/index'));
 app.use('/testPage', require('./routes/testPage'));
 app.use('/authen', require('./routes/authen'));
 app.use('/lobby', require('./routes/lobby'));
+app.use('/roomplay', require('./routes/roomplay'));
 
 // API
 app.use('/test', require('./api/test'));

@@ -9,7 +9,9 @@ let cookies_options = {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: '', message: '' }); // index.hbs file is rendered
+	var message = req.query.message || '';
+	var title = req.query.title || '';
+    res.render('index', { title: title, message: message }); // index.hbs file is rendered
 });
 
 module.exports = router;

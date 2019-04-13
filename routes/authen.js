@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 // var db = require('./firestore');
 var database = require('./database');
+var url = require('url');
 
 // /authen
 
@@ -15,18 +16,29 @@ router.post('/checkRoom', function(req,res,next){
   console.log('[DEBUG] Receive data: ');
   console.log(req.body);
 
-  database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot){
-      if(snapshot.val()){
-        console.log('[DEBUG] Room existed!');
-        // res.redirect('/', {message: 'Room existed!'});
-        res.render('roomplay/joinroom', {title: 'Enter nickname', message:'', roomID:req.body.roomID});
-      }else{
-        console.log('[DEBUG] Room not found!');
-        // res.render('/index', {title: '', message: 'Room not found!'});
-        // res.redirect('/');
-        res.render('index', {title:'', message:'Room not found'});
-      }
-  });
+  // database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot){
+  //     if(snapshot.val()){
+  //       console.log('[DEBUG] Room existed!');
+  //       // res.redirect('/', {message: 'Room existed!'});
+  //       res.redirect(url.format({
+  //         pathname:'/roomplay/joinroom',
+  //         query: {
+  //           roomID: req.body.roomID
+  //         }
+  //       }));
+  //       // res.render('roomplay/joinroom', {title: 'Enter nickname', message:'', roomID:req.body.roomID});
+  //     }else{
+  //       console.log('[DEBUG] Room not found!');
+  //       res.redirect(url.format({
+  //         pathname:'/',
+  //         query: {
+  //           title: '',
+  //           message: 'Room not found'
+  //         }
+  //       }));
+  //       // res.render('index', {title:'', message:'Room not found'});
+  //     }
+  // });
 });
 
 router.post('/setNickName', function(req,res,next){

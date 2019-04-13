@@ -7,8 +7,9 @@
     "start": "nodemon bin/www"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.4",
     "ejs": "^2.6.1",
-    "express": "^4.13.3",
+    "express": "^4.16.4",
     "express-ejs-layouts": "^2.5.0",
     "firebase": "^5.8.5",
     "firebase-admin": "^7.2.0",
