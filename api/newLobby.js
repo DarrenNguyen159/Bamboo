@@ -22,7 +22,6 @@ function randomId() {
   return randStr;
 }
 
-// TEST: Getting data on realtime database
 router.get('/', function (req, res) {
   var randId = randomId();
   database.ref('/Rooms/' + randId).once('value').then(function(snapshot) {

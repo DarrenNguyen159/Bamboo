@@ -1,0 +1,59 @@
+body {
+    font-family: 'asap, sans-serif';
+}
+
+.navbar p{
+    position: relative;
+    top: +0.45rem;
+}
+
+.navbar button {
+    color: white;
+    margin-left: 1rem;
+}
+
+.navbar {
+    font-size: 2rem;
+    height: 10rem;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50 !important;
+    box-shadow: -2px 5px 10px black;
+}
+
+.main {
+    margin-top: 2rem;
+}
+
+.playerList {
+    height: 10rem;
+    overflow-y: scroll;
+}
+
+.playerList ul{
+    list-style: none;
+}
+
+.playerList li {
+    line-height: 2rem;
+    vertical-align: middle;
+    height: 2rem;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    float: left;
+}
+
+.packList {
+    display: inline-block;
+    height: 18rem;
+    overflow-x: scroll;
+}
+
+.packCard {
+    float: left;
+    width: 10rem;
+}
+
+.packCard:hover {
+    color: black;
+}

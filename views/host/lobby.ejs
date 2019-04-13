@@ -1,41 +1,145 @@
 <!DOCTYPE html>
 <html lang="vi">
     <head>
-        <title></title>
+        <title>Bamboo - <%= lobbyID %></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="/style/index.css">
+        <link rel="stylesheet" type="text/css" href="/style/host/lobby.css">
     </head>
     <body>
-
+    <nav class="navbar navbar-light bg-light">
+        <p>Lobby ID: <span id="roomID"> <%= lobbyID %> </span></p>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <p >Host: <span id="hostname"> hostname </span></p>
+            </li>
+            <li class="nav-item">
+                <button type="button" class="btn btn-outline-dark" onclick="signOut()">Sign out</button>
+            </li>
+        </ul>
+    </nav>
     <div class="container">
-        <nav class="navbar navbar-light bg-light">
-            <p>Lobby ID: <span id="roomID"> <%= lobbyID%> </span></p>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <p >Host: <span id="hostname"> hostname </span></p>
-                </li>
-                <li class="nav-item">
-                    <button type="button" class="btn btn-outline-dark" onclick="signOut()">Sign out</button>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="footer">
-        <a href="#">Terms & Privacy</a>
+        <div class="row main">
+            <div class="col-md-8">
+                <div class="alert alert-secondary" role="alert">
+                    Players
+                </div>
+                <div class="alert alert-success playerList" role="alert">
+                    <ul>
+                        <li class="badge badge-success">Player 1</li>
+                        <li class="badge badge-success">Player 2</li>
+                        <li class="badge badge-success">Player 3</li>
+                        <li class="badge badge-success">Player 4</li>
+                        <li class="badge badge-success">Player 5</li>
+                        <li class="badge badge-success">Player 6</li>
+                        <li class="badge badge-success">Player 7</li>
+                        <li class="badge badge-success">Player 8</li>
+                        <li class="badge badge-success">Player 9</li>
+                        <li class="badge badge-success">Player 10</li>
+                    </ul>
+                </div>
+                <div class="alert alert-secondary" role="alert">
+                    <div class="row">
+                        <div class="col-sm-3"> 
+                            Question packs
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="search()">Search</button>
+                                </div>
+                                <input type="text" class="form-control">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="create()">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success packList" role="alert">
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                        <div class="card packCard">
+                            <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Pack title</h5>
+                            </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-outline-dark" onclick="back()">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="alert alert-secondary" role="alert">
+                    Pack Info
+                </div>
+                <div class="card">
+                    <img class="card-img-top" src="/images/no-image-available.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Pack Title</h5>
+                        <p class="card-text">This is an example description. This is an example description. This is an example description. This is an example description. This is an example description. This is an example description. This is an example description. This is an example description. </p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Categories</h5>
+                        <p class="card-text">
+                            <%# Tags %>
+                            <span class="badge badge-info">Tag1</span>
+                            <span class="badge badge-info">Tag2</span>
+                            <span class="badge badge-info">Tag3</span>
+                            <span class="badge badge-info">Info</span>
+                            <span class="badge badge-info">Info</span>
+                            <span class="badge badge-info">Info</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
 
     <script src="/javascript/config.js"></script>
     <script>
+        var $jq = jQuery.noConflict();
         // Check user signed-in
         firebase.auth().onAuthStateChanged(function(user) {
             if (user && !user.isAnonymous) {
@@ -52,13 +156,15 @@
                 console.log(user);
 
                 // change hostname to displayName
-                $("#hostname").text(displayName);
+                $jq("#hostname").text(displayName);
+                // get new lobby id from Firebase
+                
             // ...
             } else {
                 // User is signed out.
                 alert("You have not signed-in yet :(");
                 // Redirect to authen
-                window.location.href = '/authen';
+                window.location.href = '/authen/<%= lobbyID %>';
             // ...
             }
         });
@@ -70,6 +176,40 @@
                 console.error('Sign Out Error', error);
             });
         }
+
+        function back() {
+            // remove lobby
+            var roomID = "<%= lobbyID %>";
+            alert("/Rooms/<%= lobbyID %>/");
+            let user = firebase.auth().currentUser;
+            if (user) {// only if host is this user
+                firebase.database().ref('/Rooms/<%= lobbyID %>/').remove();
+            }
+            else {// not signed-in
+                // back to index
+                window.location.href = "/";
+            }
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1000);
+        }
+
+        function getLobbyData() {
+            $jq.ajax({
+                type: 'GET',
+                url: '/lobbyData/<%= lobbyID %>',
+                dataType: 'text',
+                success: function(data) {
+                    var roomJSON = $jq.parseJSON(data);
+                    // alert(JSON.stringify(roomJSON));
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    // alert(xhr.status);
+                    // alert(thrownError);
+                }
+            }) // End of AJAX
+        }
+        // setInterval(getLobbyData, 1000);
 
     </script>
 

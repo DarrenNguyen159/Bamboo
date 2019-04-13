@@ -32,15 +32,6 @@ app.use(cookieParser());
 
 
 // ----------------------- CONFIGURATION --------------------------------------//
-
-// TEST: Getting data on realtime database
-app.get('/test', function (req, res) {
-  database.ref('/Rooms/r001').once('value').then(function(snapshot) {
-    var data = snapshot.val();
-    res.send({room: data});
-  });
-});
-
 // router files 
 app.use('/', require('./routes/index'));
 app.use('/testPage', require('./routes/testPage'));
@@ -50,6 +41,8 @@ app.use('/roomplay', require('./routes/roomplay'));
 
 // API
 app.use('/test', require('./api/test'));
+app.use('/newLobby', require('./api/newLobby'));
+app.use('/lobbyData', require('./api/lobbyData'));
 
 // var lobbyCreator = require('./scripts/createLobby');
 // app.get('/newlobby', function(req, res) {
