@@ -142,7 +142,7 @@
         var $jq = jQuery.noConflict();
         // Check user signed-in
         firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
+            if (user && !user.isAnonymous) {
                 // User is signed in.
                 var displayName = user.displayName;
                 var email = user.email;
@@ -151,6 +151,9 @@
                 var isAnonymous = user.isAnonymous;
                 var uid = user.uid;
                 var providerData = user.providerData;
+
+                console.log('[DEBUG] user info:');
+                console.log(user);
 
                 // change hostname to displayName
                 $jq("#hostname").text(displayName);

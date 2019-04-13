@@ -1,10 +1,59 @@
 var express = require('express');
 var router = express.Router();
-var db = require('./firestore');
+// var db = require('./firestore');
+var database = require('./database');
+
+// /authen
 
 router.get('/:id', function(req, res, next) {
     var id = req.params['id'];
     res.render('login', { title: 'Log in', message: "", lobbyID: id });
+});
+
+<<<<<<< HEAD
+// router.post('/', function(req,res, next){
+//   if(!req.body) return res.sendStatus(400);
+//   console.log('[DEBUG] Receive data : ');
+//   console.log(req.body);
+
+=======
+router.post('/checkRoom', function(req,res,next){
+  if(!req.body) return res.sendStatus(400);
+
+  console.log('[DEBUG] Receive data: ');
+  console.log(req.body);
+
+  database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot){
+      if(snapshot.val()){
+        console.log('[DEBUG] Room existed!');
+        // res.redirect('/', {message: 'Room existed!'});
+        res.render('roomplay/joinroom', {title: 'Enter nickname', message:'', roomID:req.body.roomID});
+      }else{
+        console.log('[DEBUG] Room not found!');
+        // res.render('/index', {title: '', message: 'Room not found!'});
+        // res.redirect('/');
+        res.render('index', {title:'', message:'Room not found'});
+      }
+  });
+});
+
+router.post('/setNickName', function(req,res,next){
+  if(!req.body) return res.sendStatus(400);
+
+  console.log('[DEBUG] <SetNickName> Receive data: ');
+  console.log(req.body);
+
+  database.ref('Rooms/r' + req.body.roomID+ '/players/player10').set({
+    name: req.body.name,
+    uid: req.body.uid
+  });
+
+  database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot) {
+      var data = snapshot.val();
+      // console.log(data.players);
+      res.render('roomplay/roomplay', {room: data});
+  });  
+
 });
 
 // router.post('/', function(req,res, next){
@@ -12,6 +61,7 @@ router.get('/:id', function(req, res, next) {
 //   console.log('[DEBUG] Receive data : ');
 //   console.log(req.body);
 
+>>>>>>> 4b2e5a5beca16b4b07d66f27b1aa1c5bced5ebc0
 //   var users = db.collection('Accounts').doc('Users').get()
 //   .then(doc=> {
 //     if(!doc.exists){
