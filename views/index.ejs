@@ -52,8 +52,40 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
-<<<<<<< HEAD
         var $jq = jQuery.noConflict();
+
+                function enterRoom(){    
+            var roomID = document.getElementById('roomID').value;
+            var theUrl = window.location.href+'authen/checkRoom';
+            console.log('[DEBUG] roomID = '+roomID);
+            console.log('[DEBUG] link = '+theUrl);
+            // var data = new FormData();
+            // data.append('roomID', roomID);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', window.location.href+'/authen/checkRoom');
+            // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            // xhr.onload = function () {
+            //     // do something to response
+            //     console.log(this.responseText);
+            // };
+            // xhr.send(data);
+            // send ok, render not ok - bugs
+            // var xmlHttp = new XMLHttpRequest();
+            // xmlHttp.onreadystatechange = function() {
+            //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            //     {
+            //         console.log('[DEBUG] responseText : ');
+            //         console.log(xmlHttp.responseText);
+            //         callback(xmlHttp.responseText);
+            //     }
+            // }
+            // xmlHttp.open("POST", theUrl, true); // true for asynchronous
+            // xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            // xmlHttp.send('roomID='+roomID);
+            // form submit 
+            post('/authen/checkRoom', {roomID: roomID});
+        }
+
         function createLobby(){
             $jq.ajax({
                 type: 'GET',
@@ -74,75 +106,28 @@
                     // alert(thrownError);
                 }
             }) // End of AJAX
-=======
+        }
 
-        function post(path, params, method) {
+         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
-
             // The rest of this code assumes you are not using a library.
             // It can be made less wordy if you use one.
             var form = document.createElement("form");
             form.setAttribute("method", method);
             form.setAttribute("action", path);
-
             for(var key in params) {
                 if(params.hasOwnProperty(key)) {
                     var hiddenField = document.createElement("input");
                     hiddenField.setAttribute("type", "hidden");
                     hiddenField.setAttribute("name", key);
                     hiddenField.setAttribute("value", params[key]);
-
                     form.appendChild(hiddenField);
                 }
             }
-
             document.body.appendChild(form);
             form.submit();
         }
 
-        function enterRoom(){    
-
-            var roomID = document.getElementById('roomID').value;
-            var theUrl = window.location.href+'authen/checkRoom';
-
-            console.log('[DEBUG] roomID = '+roomID);
-            console.log('[DEBUG] link = '+theUrl);
-
-            // var data = new FormData();
-            // data.append('roomID', roomID);
-
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', window.location.href+'/authen/checkRoom');
-            // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xhr.onload = function () {
-            //     // do something to response
-            //     console.log(this.responseText);
-            // };
-            // xhr.send(data);
-
-            // send ok, render not ok - bugs
-            // var xmlHttp = new XMLHttpRequest();
-            // xmlHttp.onreadystatechange = function() {
-            //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            //     {
-            //         console.log('[DEBUG] responseText : ');
-            //         console.log(xmlHttp.responseText);
-            //         callback(xmlHttp.responseText);
-            //     }
-            // }
-            // xmlHttp.open("POST", theUrl, true); // true for asynchronous
-            // xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xmlHttp.send('roomID='+roomID);
-
-            // form submit 
-            post('/authen/checkRoom', {roomID: roomID});
-
-        }
-
-        function createLobby(){
-            window.location.href = '/authen'; // redirect to lobby
->>>>>>> 4b2e5a5beca16b4b07d66f27b1aa1c5bced5ebc0
-        }
     </script>
 
     </body>
