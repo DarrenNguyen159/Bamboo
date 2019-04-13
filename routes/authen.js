@@ -10,13 +10,6 @@ router.get('/:id', function(req, res, next) {
     res.render('login', { title: 'Log in', message: "", lobbyID: id });
 });
 
-<<<<<<< HEAD
-// router.post('/', function(req,res, next){
-//   if(!req.body) return res.sendStatus(400);
-//   console.log('[DEBUG] Receive data : ');
-//   console.log(req.body);
-
-=======
 router.post('/checkRoom', function(req,res,next){
   if(!req.body) return res.sendStatus(400);
 
@@ -61,7 +54,6 @@ router.post('/setNickName', function(req,res,next){
 //   console.log('[DEBUG] Receive data : ');
 //   console.log(req.body);
 
->>>>>>> 4b2e5a5beca16b4b07d66f27b1aa1c5bced5ebc0
 //   var users = db.collection('Accounts').doc('Users').get()
 //   .then(doc=> {
 //     if(!doc.exists){
