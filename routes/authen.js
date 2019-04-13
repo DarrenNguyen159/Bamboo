@@ -16,7 +16,7 @@ router.post('/checkRoom', function(req,res,next){
   console.log('[DEBUG] Receive data: ');
   console.log(req.body);
 
-  database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot){
+  database.ref('/Rooms/'+req.body.roomID).once('value').then(function(snapshot){
       if(snapshot.val()){
         console.log('[DEBUG] Room existed!');
         // res.redirect('/', {message: 'Room existed!'});
@@ -36,12 +36,13 @@ router.post('/setNickName', function(req,res,next){
   console.log('[DEBUG] <SetNickName> Receive data: ');
   console.log(req.body);
 
-  database.ref('Rooms/r' + req.body.roomID+ '/players/player10').set({
+  database.ref('Rooms/' + req.body.roomID+ '/players/'+ req.body.name).set({
     name: req.body.name,
-    uid: req.body.uid
+    uid: req.body.uid,
+    score: 0
   });
 
-  database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot) {
+  database.ref('/Rooms/'+req.body.roomID).once('value').then(function(snapshot) {
       var data = snapshot.val();
       // console.log(data.players);
       res.render('roomplay/roomplay', {room: data});
