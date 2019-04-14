@@ -1,13 +1,16 @@
 /* @import url('https://fonts.googleapis.com/css?family=Bangers'); */
 
 body {
-    background-color: lightgreen;
-    font-family: 'Bangers', cursive;
+    font-family: 'Raleway', sans-serif;
+    -webkit-animation: bgcolor 20s infinite;
+    animation: bgcolor 10s infinite;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
 }
 
 .center {
     margin: auto;
-    margin-top: 20%;
+    margin-top: 20px;
     width: 100%;
 }
 
@@ -41,7 +44,7 @@ body {
 
 .logo {
     text-align: center;
-    color: white;
+    color: black;
     margin: auto;
     font-size: 3rem;
     font-weight: bold;
@@ -55,6 +58,29 @@ body {
     width:100%;
     text-align: center;
  }
+
+@keyframes bgcolor {
+    0% {
+        background-color: #47d666
+    }
+
+    30% {
+        background-color: #6cd654
+    }
+
+    60% {
+        background-color: #9ad04c
+    }
+
+    90% {
+        background-color: #c1df51
+    }
+
+    100% {
+        background-color: #cbdd6e
+    }
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {

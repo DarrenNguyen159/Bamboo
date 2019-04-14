@@ -7,38 +7,17 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="/style/index.css">
+
+        <link rel="stylesheet" href="/style/roomplay/player.css" />
+
     </head>
     <body>
-    
-    <h3>Hello <span id="user"><%= currentPlayer%></span></h3>
-    <h3>Room ID: <span id="roomID"><%= currentRoom%></span></h3>
-
-    <div class="container-fluid">
-        <div class="center">
-            <% Object.keys(room.players).forEach(function(key){ %>
-                <p><%= key %>: <%= room.players[key].name %>, score: <%= room.players[key].score %> </p>
-            <% }) %>
+        <div class="waiting">
+            <h1 id="title1">You are in!</h1>
+            <h3 id="title2">Waiting for host</h3>
+            <div class="loader"></div>
+            <br/>
         </div>
-    </div>
-
-
-    <div class="container-fluid">
-        <div class="center">
-            <p id="timer"> </p>
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="center">
-            <h2>Status: <%= room.status%></h2>
-            <h2>Timer: <%= room.timer%></h2>
-        </div>
-    </div>
-
-    <div class="footer">
-        <a href="#">Terms & Privacy</a>
-    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
