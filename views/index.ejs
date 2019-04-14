@@ -85,7 +85,7 @@
         function createLobby(){
             $jq.ajax({
                 type: 'GET',
-                url: '/test',
+                url: '/newLobby',
                 dataType: 'text',
                 success: function(data) {
                     var lobbyJSON = $jq.parseJSON(data);

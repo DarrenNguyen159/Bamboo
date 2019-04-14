@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var database = require('../routes/database');
 
-// TEST: Getting data on realtime database
+// Get Lobby Data
 router.get('/:id', function (req, res) {
   var id = req.params['id'];
   database.ref('/Rooms/' + id).once('value').then(function(snapshot) {

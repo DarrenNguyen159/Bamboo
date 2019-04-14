@@ -24,12 +24,12 @@ function randomId() {
 
 router.get('/', function (req, res) {
   var randId = randomId();
-  database.ref('/Rooms/' + randId).once('value').then(function(snapshot) {
+  database.ref('/Rooms/r' + randId).once('value').then(function(snapshot) {
     var data = snapshot.val();
     if (data == null) {
       // Valid new Id
       var roomData = {id:randId, status: "lobby"};
-      database.ref('/Rooms/' + randId).set(roomData);
+      database.ref('/Rooms/r' + randId).set(roomData);
       res.send(roomData);
     }
     else {

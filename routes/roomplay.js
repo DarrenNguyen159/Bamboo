@@ -26,7 +26,7 @@ router.get('/joinroom', function(req, res, next) {
 		database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot){
 		  if(snapshot.val()){
 		  	// Room existed ! Render page to enter nick name 
-			res.render('roomplay/joinroom', {title: '', roomID: roomID, message:''});
+				res.render('roomplay/joinroom', {title: '', roomID: roomID, message:''});
 		  }else{
 		  	// Room not found!
 		    res.redirect('/');
@@ -74,22 +74,23 @@ router.post('/checkNickName', function(req,res,next){
 	var type = req.body.playerType; // temporaryUser 0, loggedInUser 1
 	var uid = req.body.uid; // = uid if type=1; = undefined if type=0
 
-	console.log(req.cookies);
+	console.log("[Debug]Cookies" + JSON.stringify(req.cookies));
 
 	res.status(200);
-    res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Type', 'application/json');
 	    
-	database.ref('/Rooms/r'+roomID+'/players').once('value').then(function(snapshot){
-	  var data = snapshot.val();
+	database.ref('/Rooms/r' + roomID + '/players').once('value').then(function(snapshot){
+		var data = snapshot.val();
+		console.log("[DEBUG] Finding player:" + nickName + " in " + roomID);
+		console.log("[DEBUG] players in lobby " + roomID + ":" + JSON.stringify(data));
 	  if(data){
 	  	var isValid = true;
 	  	Object.keys(data).forEach(function(key) {
-		    if(data[key].name==nickName){
+		    if(data[key].name == nickName){
 		    	isValid = false;
-		    }
+				}
 		});
 		if(isValid){
-
 			if(type=='0'){ 
 				var id=0;
 				while(true){
@@ -118,8 +119,13 @@ router.post('/checkNickName', function(req,res,next){
 		} else {
 			res.json({isValidNickName:0});
 		}
-	  }else{
-	  	res.json({isValidNickName:0});
+		} else {// first to join
+			// respond to client 
+			res.json({isValidNickName:1});
+			// create new user
+			database.ref('/Rooms/r'+ roomID + '/players/'+ 'player0').set({
+				name: nickName
+			});
 	  }
 	});
 });
