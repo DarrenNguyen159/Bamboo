@@ -33,7 +33,16 @@ app.use('/', require('./routes/index'));
 app.use('/testPage', require('./routes/testPage'));
 app.use('/authen', require('./routes/authen'));
 app.use('/lobby', require('./routes/lobby'));
-
+// app.use('/answer', require('./routes/answer'));
+app.get('/answer', function(req, res) {
+	res.render('roomplay/answer');
+});
+app.get('/correct', function(req, res) {
+	res.render('roomplay/correct');
+});
+app.get('/incorrect', function(req, res) {
+	res.render('roomplay/incorrect');
+});
 // API
 app.use('/test', require('./api/test'));
 app.use('/newLobby', require('./api/newLobby'));
