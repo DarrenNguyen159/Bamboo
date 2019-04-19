@@ -26,17 +26,8 @@
                     Players
                 </div>
                 <div class="alert alert-success playerList" role="alert">
-                    <ul>
+                    <ul id="playerList">
                         <li class="badge badge-success">Player 1</li>
-                        <li class="badge badge-success">Player 2</li>
-                        <li class="badge badge-success">Player 3</li>
-                        <li class="badge badge-success">Player 4</li>
-                        <li class="badge badge-success">Player 5</li>
-                        <li class="badge badge-success">Player 6</li>
-                        <li class="badge badge-success">Player 7</li>
-                        <li class="badge badge-success">Player 8</li>
-                        <li class="badge badge-success">Player 9</li>
-                        <li class="badge badge-success">Player 10</li>
                     </ul>
                 </div>
                 <div class="alert alert-secondary" role="alert">
@@ -194,7 +185,19 @@
             }, 1000);
         }
 
+        function updateRoomData(players){
+            // alert(JSON.stringify(players));
+            var playerList = $jq("#playerList");
+            let childStr = "";
+            for (var key in players) {
+                // alert(JSON.stringify(player));
+                childStr += "<li class=\"badge badge-success\">" + players[key]['name'] + "</li>";
+            }
+            playerList.html(childStr);
+        }
+
         function getLobbyData() {
+            
             $jq.ajax({
                 type: 'GET',
                 url: '/lobbyData/<%= lobbyID %>',
@@ -202,6 +205,7 @@
                 success: function(data) {
                     var roomJSON = $jq.parseJSON(data);
                     // alert(JSON.stringify(roomJSON));
+                    updateRoomData(roomJSON['players']);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);
@@ -209,7 +213,7 @@
                 }
             }) // End of AJAX
         }
-        // setInterval(getLobbyData, 1000);
+        setInterval(getLobbyData, 1000);
 
     </script>
 
