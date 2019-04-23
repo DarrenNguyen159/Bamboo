@@ -63,7 +63,7 @@
             console.log('[SENT]'+ roomID);
             $jq.ajax({
                 type: 'POST',
-                url: '/roomplay/checkRoom',
+                url: '/player/checkRoom',
                 dataType: 'json',
                 data: {roomID: roomID},
                 success: function(data) {
@@ -71,7 +71,7 @@
                     console.log(data.statusRoom);
                     // statusRoom = 1 if room existed, otherwise 0 
                     if(data.statusRoom){
-                        window.location.href='/roomplay/joinroom?roomID='+roomID;
+                        window.location.href='/player/joinRoom?roomID='+roomID;
                     }else{
                         document.getElementById('message').innerHTML = 'Room not found!';
                     }
@@ -93,7 +93,6 @@
                         alert("Failed: Create a new lobby! Try again.");
                     }
                     else {
-                        alert("You just create a new lobby");
                         window.location.href = "/lobby/"  + lobbyJSON.id;
                     }
                 },

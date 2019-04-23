@@ -4,14 +4,7 @@ var database = require('./database');
 var url = require('url');
 
 /*
-	
-
-
-
-
-
-
-
+	/player
 */
 var options = {
 	maxAge: 1000 * 60 * 15, //  would expire after 15 mins
@@ -19,14 +12,14 @@ var options = {
 	signed: false // Indicates if the cookie should be signed
 }
 
-router.get('/joinroom', function(req, res, next) {
+router.get('/joinRoom', function(req, res, next) {
 	var roomID = req.query.roomID;
 	if(roomID){
 		// roomID is required ! If roomID is undefined, redirect to home page
 		database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot){
 		  if(snapshot.val()){
 		  	// Room existed ! Render page to enter nick name 
-				res.render('roomplay/joinroom', {title: '', roomID: roomID, message:''});
+				res.render('player/joinRoom', {title: '', roomID: roomID, message:''});
 		  }else{
 		  	// Room not found!
 		    res.redirect('/');
@@ -131,7 +124,7 @@ router.post('/checkNickName', function(req,res,next){
 });
 
 
-router.get('/roomplay', function(req,res,next){
+router.get('/gameView', function(req,res,next){
 
 	// read cookies 
 	console.log(req.cookies);
@@ -144,7 +137,7 @@ router.get('/roomplay', function(req,res,next){
         if(data){
 			database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot) {
 			    res.render(
-			    	'roomplay/roomplay', 
+			    	'player/gameView', 
 			    	{
 			    		room: snapshot.val(), 
 			    		currentPlayer: data.name, 
@@ -157,10 +150,6 @@ router.get('/roomplay', function(req,res,next){
         	res.redirect('/');
         }
     });
-
-
-
-
 });
 
 

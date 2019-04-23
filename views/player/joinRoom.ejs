@@ -88,7 +88,7 @@
             
             $jq.ajax({
                 type: 'POST',
-                url: '/roomplay/checkNickName',
+                url: '/player/checkNickName',
                 dataType: 'json',
                 data: {roomID: roomID, nickName: nickName, uid: '', playerType:'0'},
                 success: function(data) {
@@ -102,7 +102,7 @@
                         // $jq.cookie('roomID',roomID, {
                         //     expires: 10 // expires in 10 days
                         // });
-                        window.location.href = '/roomplay/roomplay';
+                        window.location.href = '/player/gameView';
                     }else{
                         document.getElementById('message').innerHTML = 'Nick name existed !';
                     }
@@ -122,7 +122,7 @@
                     var uid = user.uid;
                     $jq.ajax({
                         type: 'POST',
-                        url: '/roomplay/checkNickName',
+                        url: '/player/checkNickName',
                         dataType: 'json',
                         data: {roomID: roomID, nickName: displayName, uid: uid, playerType:'0'},
                         success: function(data) {
@@ -130,7 +130,7 @@
                             console.log('[DEBUG]');
                             console.log(data.isValidNickName);
                             if(data.isValidNickName){
-                                window.location.href = '/roomplay/roomplay';
+                                window.location.href = '/player/gameView';
                             }else{
                                 document.getElementById('message').innerHTML = 'Nick name existed !';
                             }

@@ -37,7 +37,8 @@ app.use('/', require('./routes/index'));
 app.use('/testPage', require('./routes/testPage'));
 app.use('/authen', require('./routes/authen'));
 app.use('/lobby', require('./routes/lobby'));
-app.use('/roomplay', require('./routes/roomplay'));
+app.use('/player', require('./routes/player'));
+app.use('/host', require('./routes/host'));
 
 // API
 app.use('/test', require('./api/test'));
