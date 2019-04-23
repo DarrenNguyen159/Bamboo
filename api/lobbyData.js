@@ -9,6 +9,12 @@ router.get('/', function (req, res) {
     res.json(snapshot.val());
   });
 });
+// router.get('/:id', function (req, res) {
+//   var id = req.params['id'];
+//   database.ref('/Rooms/r' + id).once('value').then(function(snapshot) {
+//     res.send(snapshot.val());
+//   });
+// });
 
 router.get('/players', function (req, res) {
   var roomID = req.query.roomID;
