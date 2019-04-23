@@ -39,6 +39,7 @@ app.use('/authen', require('./routes/authen'));
 app.use('/lobby', require('./routes/lobby'));
 app.use('/player', require('./routes/player'));
 app.use('/host', require('./routes/host'));
+app.use('/createQuestionPacks', require('./routes/createQuestionPacks'));
 
 // API
 app.use('/test', require('./api/test'));

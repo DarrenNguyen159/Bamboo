@@ -2,6 +2,24 @@ body {
     font-family: 'asap, sans-serif';
 }
 
+.main {
+    margin-top: 20rem;
+}
+#question-list {
+    max-height: 42rem;
+    overflow-y: scroll;
+}
+
+.desc-edit textarea {
+    height: 15rem;
+    min-height: 15rem;
+    max-height: 15rem;
+}
+
+.question-text-edit {
+    min-height: 5rem;
+}
+
 .navbar p{
     position: relative;
     top: +0.45rem;
