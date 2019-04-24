@@ -12,56 +12,56 @@ var options = {
 	signed: false // Indicates if the cookie should be signed
 }
 
-router.get('/joinRoom', function(req, res, next) {
+router.get('/joinRoom', function (req, res, next) {
 	var roomID = req.query.roomID;
-	if(roomID){
+	if (roomID) {
 		// roomID is required ! If roomID is undefined, redirect to home page
-		database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot){
-		  if(snapshot.val()){
-		  	// Room existed ! Render page to enter nick name 
-				res.render('player/joinRoom', {title: '', roomID: roomID, message:''});
-		  }else{
-		  	// Room not found!
-		    res.redirect('/');
-	      }
+		database.ref('/Rooms/r' + roomID).once('value').then(function (snapshot) {
+			if (snapshot.val()) {
+				// Room existed ! Render page to enter nick name 
+				res.render('player/joinRoom', { title: '', roomID: roomID, message: '' });
+			} else {
+				// Room not found!
+				res.redirect('/');
+			}
 		});
-	}else{
+	} else {
 		// roomID is undefined
 		res.redirect('/');
 	}
 });
 
-router.post('/checkRoom', function(req,res,next){
+router.post('/checkRoom', function (req, res, next) {
 	res.status(200);
-    res.setHeader('Content-Type', 'application/json');
-    
-	database.ref('/Rooms/r'+req.body.roomID).once('value').then(function(snapshot){
-	  if(snapshot.val()){
-	  	// Room existed !
-	    res.json({statusRoom:1});
-	  }else{
-	  	// Room not found!
-	    res.json({statusRoom:0});
-      }
+	res.setHeader('Content-Type', 'application/json');
+
+	database.ref('/Rooms/r' + req.body.roomID).once('value').then(function (snapshot) {
+		if (snapshot.val()) {
+			// Room existed !
+			res.json({ statusRoom: 1 });
+		} else {
+			// Room not found!
+			res.json({ statusRoom: 0 });
+		}
 	});
 });
 
-router.get('/checkRoom', function(req,res,next){
+router.get('/checkRoom', function (req, res, next) {
 	res.status(200);
-    res.setHeader('Content-Type', 'application/json');
-    
-	database.ref('/Rooms/r'+req.query.roomID).once('value').then(function(snapshot){
-	  if(snapshot.val()){
-	  	// Room existed !
-	    res.json({statusRoom:1});
-	  }else{
-	  	// Room not found!
-	    res.json({statusRoom:0});
-      }
+	res.setHeader('Content-Type', 'application/json');
+
+	database.ref('/Rooms/r' + req.query.roomID).once('value').then(function (snapshot) {
+		if (snapshot.val()) {
+			// Room existed !
+			res.json({ statusRoom: 1 });
+		} else {
+			// Room not found!
+			res.json({ statusRoom: 0 });
+		}
 	});
 });
 
-router.post('/checkNickName', function(req,res,next){
+router.post('/checkNickName', function (req, res, next) {
 	var nickName = req.body.nickName;
 	var roomID = req.body.roomID;
 	var type = req.body.playerType; // temporaryUser 0, loggedInUser 1
@@ -70,86 +70,92 @@ router.post('/checkNickName', function(req,res,next){
 	console.log("[Debug]Cookies" + JSON.stringify(req.cookies));
 
 	res.status(200);
-  res.setHeader('Content-Type', 'application/json');
-	    
-	database.ref('/Rooms/r' + roomID + '/players').once('value').then(function(snapshot){
+	res.setHeader('Content-Type', 'application/json');
+
+	var id = 0;
+
+	database.ref('/Rooms/r' + roomID + '/players').once('value').then(function (snapshot) {
 		var data = snapshot.val();
 		console.log("[DEBUG] Finding player:" + nickName + " in " + roomID);
 		console.log("[DEBUG] players in lobby " + roomID + ":" + JSON.stringify(data));
-	  if(data){
-	  	var isValid = true;
-	  	Object.keys(data).forEach(function(key) {
-		    if(data[key].name == nickName){
-		    	isValid = false;
+		if (data) {
+			var isValid = true;
+			Object.keys(data).forEach(function (key) {
+				if (data[key].name == nickName) {
+					isValid = false;
 				}
-		});
-		if(isValid){
-			if(type=='0'){ 
-				var id=0;
-				while(true){
-					if(Object.keys(data).includes('player'+id.toString())){
-						id++;
-					}else{
-						break;
-					}
-				}
-				uid='player'+id.toString();
-			}
-
-			// set cookies
-			res.cookie('uid',uid);
-			res.cookie('roomID',roomID);
-
-			// respond to client 
-			res.json({isValidNickName:1});
-
-			// create new user
-			database.ref('/Rooms/r'+roomID+'/players/'+uid).set({
-				name: nickName
 			});
+			if (isValid) {
+				if (type == '0') {
+					while (true) {
+						if (Object.keys(data).includes('player' + id.toString())) {
+							id++;
+						} else {
+							break;
+						}
+					}
+					uid = 'player' + id.toString();
+				}
+
+				// set cookies
+				res.cookie('uid', uid);
+				res.cookie('roomID', roomID);
+
+				// respond to client 
+				res.json({ isValidNickName: 1 });
+
+				// create new user
+				database.ref('/Rooms/r' + roomID + '/players/' + uid).set({
+					name: nickName
+				});
 
 
-		} else {
-			res.json({isValidNickName:0});
-		}
+			} else {
+				res.json({ isValidNickName: 0 });
+			}
 		} else {// first to join
 			// respond to client 
-			res.json({isValidNickName:1});
+			// set cookies
+			res.cookie('uid', uid);
+			res.cookie('roomID', roomID);
+
+			// respond to client 
+			res.json({ isValidNickName: 1 });
+
 			// create new user
-			database.ref('/Rooms/r'+ roomID + '/players/'+ 'player0').set({
+			database.ref('/Rooms/r' + roomID + '/players/player0').set({
 				name: nickName
 			});
-	  }
+		}
 	});
 });
 
 
-router.get('/gameView', function(req,res,next){
-
+router.get('/gameView', function (req, res, next) {
 	// read cookies 
-	console.log(req.cookies);
+	console.log("[DEBUG] gameView:" + JSON.stringify(req.cookies));
 
 	// check if uid and 
 	uid = req.cookies.uid;
 	roomID = req.cookies.roomID;
-	database.ref('/Rooms/r'+roomID+'/players/'+uid).once('value').then(function(snapshot) {
-        var data = snapshot.val();
-        if(data){
-			database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot) {
-			    res.render(
-			    	'player/gameView', 
-			    	{
-			    		room: snapshot.val(), 
-			    		currentPlayer: data.name, 
-			    		currentRoom: roomID
-			    	}
-			    );
+	database.ref('/Rooms/r' + roomID + '/players/' + uid).once('value').then(function (snapshot) {
+		var data = snapshot.val();
+		if (data) {
+			database.ref('/Rooms/r' + roomID).once('value').then(function (snapshot) {
+				res.render(
+					'player/gameView',
+					{
+						room: snapshot.val(),
+						currentPlayer: data.name,
+						currentRoom: roomID
+					}
+				);
 			});
-        }else{
-        	// redirect to homepage if player does not exist in that room
-        	res.redirect('/');
-        }
-    });
+		} else {
+			// redirect to homepage if player does not exist in that room
+			res.redirect('/');
+		}
+	});
 });
 
 

@@ -2,9 +2,10 @@ body {
     font-family: 'asap, sans-serif';
 }
 
-.main {
-    margin-top: 20rem;
+.left {
+    margin-top: 2rem;
 }
+
 #question-list {
     max-height: 42rem;
     overflow-y: scroll;

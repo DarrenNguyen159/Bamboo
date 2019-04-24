@@ -14,6 +14,7 @@ var options = {
 
 router.get('/gameView', function(req,res,next){
 	var roomID = req.query.roomID;
+	var questionPacksId = "001";
 	// console.log('here?');
 	if(!roomID){
 		redirect('/');
@@ -21,7 +22,7 @@ router.get('/gameView', function(req,res,next){
 		database.ref('/Rooms/r'+roomID).once('value').then(function(snapshot){
 		  if(snapshot.val()){
 		  	// Room existed !
-		    res.render('host/gameView', {roomID: roomID});
+		    res.render('host/gameView', {roomID: roomID, questionPacksId: questionPacksId});
 		  }else{
 		  	// Room not found!
 		    redirect('/');

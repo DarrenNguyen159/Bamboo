@@ -10,6 +10,7 @@
     <body>
     <nav class="navbar navbar-light bg-light">
         <p>Lobby ID: <span id="roomID"> <%= lobbyID %> </span></p>
+        <button type="button" class="btn btn-success startButton" onclick="enterWaitingRoom()">Enter Waiting Room</button>
         <ul class="nav justify-content-end">
             <li class="nav-item">
                 <p >Host: <span id="hostname"> hostname </span></p>
@@ -188,7 +189,7 @@
             }, 1000);
         }
 
-        function updateRoomData(players){
+        function updatePlayersList(players){
             // alert(JSON.stringify(players));
             var playerList = $jq("#playerList");
             let childStr = "";
@@ -199,20 +200,19 @@
             playerList.html(childStr);
         }
 
-        function getLobbyData() {
-            
+        function getPlayersData() {
             $jq.ajax({
                 type: 'GET',
-                url: '/lobbyData/<%= lobbyID %>',
+                url: '/lobbyData/players?roomID=<%= lobbyID %>',
                 dataType: 'text',
                 success: function(data) {
-                    var roomJSON = $jq.parseJSON(data);
-                    // alert(JSON.stringify(roomJSON));
-                    updateRoomData(roomJSON['players']);
+                    var playersJSON = $jq.parseJSON(data);
+                    // alert(JSON.stringify(playersJSON));
+                    updatePlayersList(playersJSON);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);
-                    // alert(thrownError);
+                    alert(thrownError);
                 }
             }) // End of AJAX
         }
@@ -220,10 +220,10 @@
         function enterWaitingRoom(){
             window.location.href = '/host/gameView?roomID=<%= lobbyID%>';
         }
-        // setInterval(getLobbyData, 1000);
 
-        setInterval(getLobbyData, 1000);
-
+        setInterval(function() {
+            getPlayersData();
+        }, 1000);
 
     </script>
 
