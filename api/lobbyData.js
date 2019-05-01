@@ -27,7 +27,7 @@ router.get('/question', function (req, res) {
   var roomID = req.query.roomID;
   var questionPacksId = req.query.questionPacksId;
   var questionNumber = req.query.questionNumber;
-  database.ref('/QuestionPacks/q' + questionPacksId + '/question' + questionNumber).once('value').then(function (snapshot) {
+  database.ref('/QuestionPacks/q' + questionPacksId + 'questions/question' + questionNumber).once('value').then(function (snapshot) {
     res.json(snapshot.val());
   });
 });
