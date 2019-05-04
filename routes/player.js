@@ -72,12 +72,8 @@ router.post('/checkNickName', function (req, res, next) {
 	res.status(200);
 	res.setHeader('Content-Type', 'application/json');
 
-	var id = 0;
-
 	database.ref('/Rooms/r' + roomID + '/players').once('value').then(function (snapshot) {
 		var data = snapshot.val();
-		console.log("[DEBUG] Finding player:" + nickName + " in " + roomID);
-		console.log("[DEBUG] players in lobby " + roomID + ":" + JSON.stringify(data));
 		if (data) {
 			var isValid = true;
 			Object.keys(data).forEach(function (key) {
@@ -86,27 +82,19 @@ router.post('/checkNickName', function (req, res, next) {
 				}
 			});
 			if (isValid) {
-				if (type == '0') {
-					while (true) {
-						if (Object.keys(data).includes('player' + id.toString())) {
-							id++;
-						} else {
-							break;
-						}
-					}
-					uid = 'player' + id.toString();
-				}
+				player = 'player' + Object.keys(data).length.toString();
 
 				// set cookies
-				res.cookie('uid', uid);
+				res.cookie('player', player);
 				res.cookie('roomID', roomID);
 
 				// respond to client 
 				res.json({ isValidNickName: 1 });
 
 				// create new user
-				database.ref('/Rooms/r' + roomID + '/players/' + uid).set({
-					name: nickName
+				database.ref('/Rooms/r' + roomID + '/players/' + player).set({
+					name: nickName,
+					score: 0,
 				});
 
 
@@ -116,7 +104,7 @@ router.post('/checkNickName', function (req, res, next) {
 		} else {// first to join
 			// respond to client 
 			// set cookies
-			res.cookie('uid', uid);
+			res.cookie('player', 'player0');
 			res.cookie('roomID', roomID);
 
 			// respond to client 
@@ -124,7 +112,8 @@ router.post('/checkNickName', function (req, res, next) {
 
 			// create new user
 			database.ref('/Rooms/r' + roomID + '/players/player0').set({
-				name: nickName
+				name: nickName,
+				score: 0,
 			});
 		}
 	});
@@ -135,10 +124,10 @@ router.get('/gameView', function (req, res, next) {
 	// read cookies 
 	console.log("[DEBUG] gameView:" + JSON.stringify(req.cookies));
 
-	// check if uid and 
-	uid = req.cookies.uid;
+	// check if and 
+	player = req.cookies.player;
 	roomID = req.cookies.roomID;
-	database.ref('/Rooms/r' + roomID + '/players/' + uid).once('value').then(function (snapshot) {
+	database.ref('/Rooms/r' + roomID + '/players/' + player).once('value').then(function (snapshot) {
 		var data = snapshot.val();
 		if (data) {
 			database.ref('/Rooms/r' + roomID).once('value').then(function (snapshot) {

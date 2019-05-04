@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var database = require('../routes/database');
 
+const POINTS_PER_QUESTION = 1000;
 
 module.exports = {
   /*
@@ -30,8 +31,11 @@ module.exports = {
     var questionNumber = info.questionNumber;
     var status = info.status;
     
-    database.ref('/Rooms/r' + roomID+'/questionNumber').set(questionNumber);
-    database.ref('/Rooms/r' + roomID+'/status').set(status);
+    database.ref('/Rooms/r' + roomID+'/status').set({
+      questionNumber:questionNumber,
+      status:status
+    });
+
   },
 
   getAnswerAndTopScores : function(func, info){
@@ -46,19 +50,54 @@ module.exports = {
       var result = snapshot.val();
       console.log('[] here 1?', result);
       if(result){
-        console.log('[] here 1?');
+        console.log('[] here 2?');
         answer = result.answer;
         database.ref('/Rooms/r'+roomID+'/players').once('value').then(function(snapshot){
+          console.log('[] here 3?');
           var players = snapshot.val();
+          var result = {};
 
           var top = [];
+          var countAnswers = {a:0, b:0, c:0, d:0};
+
           for (var player in players) {
-              top.push([player, players[player].score]);
+            let answers = players[player].answers;
+            if(answers){
+              let currQuestion = answers['question'+questionNumber.toString()];
+              if(currQuestion){
+                var playerAnswer = currQuestion.choice;
+                countAnswers[playerAnswer]++;
+                if(playerAnswer == answer){
+                  var pointsAdding = POINTS_PER_QUESTION;
+                  result[player] = {answerStatus:'correct', points:pointsAdding};
+                  players[player].score += pointsAdding;
+                  database.ref('/Rooms/r' + roomID+'/players/'+player+'/score').set(players[player].score);
+                }else{
+                  result[player] = {answerStatus:'incorrect', points:0};
+                }
+              }else{
+                result[player] = {answerStatus:'incorrect', points:0};
+              }
+            }else{
+              result[player] = {answerStatus:'incorrect', points:0};
+            }
+            top.push([player, players[player].score]);
           }
 
           top.sort(function(a, b) {
               return b[1]-a[1];
           });
+
+          for (var player in players) {
+            let ind=0;
+            for(i of top){
+              ind++;
+              if(i[0] == player){
+                result[player].rank = ind;
+                break;
+              }
+            }
+          }
 
           top = top.slice(0,numTop);
 
@@ -75,14 +114,24 @@ module.exports = {
             }else{
               state = 3;
             }
-
+            
             // do
-            func({
-              state:state,
-              answer:answer,
-              top: top,
-              numTop: numTop
-            });
+            func(
+              {
+                roomID:roomID,
+                countAnswers:countAnswers,
+                state:state,
+                answer:answer,
+                top: top,
+                numTop: numTop
+              },
+              {
+                roomID:roomID,
+                players:result,
+                state:state
+              }
+            );
+
           });
         });
       }
@@ -101,5 +150,26 @@ module.exports = {
       }
     });
   },
+
+  answeringQuestion : function(func, info){
+    var roomID = info.roomID;
+    var answer = info.answer;
+    var player = info.player;
+    var questionNumber = info.questionNumber;
+
+    // check valid roomID and questionNumber 
+    database.ref('/Rooms/r'+roomID + '/status').once('value').then(function (snapshot) {
+      var statusRoom = snapshot.val();
+      if(statusRoom){
+        if(statusRoom.status=='playing' && statusRoom.questionNumber == questionNumber){
+          database.ref('/Rooms/r' + roomID+'/players/' + player + '/answers/question'+questionNumber.toString()).set({
+            choice:answer
+          });
+        }
+      }
+    });
+  },
+
+
 };
 
