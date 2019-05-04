@@ -32,7 +32,6 @@ module.exports.setup = function(server){
 		socket.on('host', function(data){
 			if(data.state==1){
 				// get question and starting playing
-				console.log('[DEBUG] data = ', data);
 				var roomID = data.roomID;
 				var questionsPackId = data.questionsPackId;
 				var questionNumber = data.questionNumber;
@@ -48,7 +47,6 @@ module.exports.setup = function(server){
 								status:"playing"
 							}
 						);
-						console.log('HERE 1  ?');
 						io.sockets.emit('host',{
 							state: 1,
 							a: rs.a,
@@ -75,6 +73,9 @@ module.exports.setup = function(server){
 				// stop that question, display answer and top 4 score
 				var roomID = data.roomID;
 				var questionNumber = data.questionNumber;
+				var questionsPackId = data.questionsPackId;
+
+				console.log('[] DATA =', data);
 
 				// set status to not accept any answer
 				lobbyData.setStatusRoom(
@@ -89,11 +90,11 @@ module.exports.setup = function(server){
 				// display
 				lobbyData.getAnswerAndTopScores(
 					function(rs){
-						io.sockets.emit('host',{rs});
+						io.sockets.emit('host',rs);
 					},
 					{
 						roomID: roomID,
-						questionPacksId: questionPacksId,
+						questionsPackId: questionsPackId,
 						questionNumber: questionNumber,
 						numTop: NUM_TOP
 					}
