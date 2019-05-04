@@ -83,35 +83,5 @@ module.exports = {
       }
     });
   },
-
-
-
-
 };
-
-
-
-// Get Lobby Data
-// router.get('/', function (req, res) {
-//   var roomID = req.query.roomID;
-//   database.ref('/Rooms/r' + roomID).once('value').then(function (snapshot) {
-//     res.json(snapshot.val());
-//   });
-// });
-
-// router.get('/players', function (req, res) {
-//   var roomID = req.query.roomID;
-//   database.ref('/Rooms/r' + roomID + '/players').once('value').then(function (snapshot) {
-//     res.json(snapshot.val());
-//   });
-// });
-
-// router.get('/question', function (req, res) {
-//   var roomID = req.query.roomID;
-//   var questionPacksId = req.query.questionPacksId;
-//   var questionNumber = req.query.questionNumber;
-//   database.ref('/QuestionPacks/q' + questionPacksId + 'questions/question' + questionNumber).once('value').then(function (snapshot) {
-//     res.json(snapshot.val());
-//   });
-// });
 
