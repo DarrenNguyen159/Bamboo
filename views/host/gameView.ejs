@@ -14,47 +14,7 @@
 
     </head>
     <body>
-        <div id="waiting">    
-            <div class="pos-f-t">
-              <div class="collapse" id="navbarToggleExternalContent">
-                <div class="bg-dark p-4">
-                  <h5 class="text-white h4">Collapsed content</h5>
-                  <span class="text-muted">Toggleable via the navbar brand.</span>
-                </div>
-              </div>
-              <nav class="navbar navbar-dark bg-dark">
-                
-                <div class="col-md-12 text-center">
-                <h1 class="h1" style="color:#fff;">JOIN WITH ID <span style="color:red"><%= roomID%></span></h1> 
-                </div>
-              </nav>
-            </div>
-            <br>
-            <div class="col-md-6 text-left">
-                <h1 class="h1" id="numPlayers">0 Players</h1>
-            </div>
-            <div class="col-md-6 text-right">
-                <button id="singlebutton" name="singlebutton" class="btn btn-primary" onclick="startGame()">Start</button> 
-            </div>
-            <div class="col-md-6 text-right">
-                <button id="singlebutton" name="singlebutton" class="btn btn-primary" onclick="waitingMode()">Waiting Mode</button> 
-            </div>
-            <br>
-            <!-- <div class="container-fluid" id="playerInfo">
-                <div class="row">
-                    <div class="col-sm-3 text-center">
-                        <button type="button" class="btn btn-danger">Danger</button>    
-                    </div>
-                </div>
-                <br>
-            </div> -->          
-
-
-
-            <!-- <div class="loader"></div> -->
-            <br/>
-        </div>
-        <div id="playing" style="display:none;">
+        <div id="playing">
             <div class="pos-f-t">
               <nav class="navbar navbar-dark bg-dark">
                 <div class="col-md-12 text-center">
@@ -67,6 +27,47 @@
               aria-valuemin="0" aria-valuemax="100" id="progressBar" style="width:20%">
                 <!-- 70% Complete (danger) -->
               </div>
+            </div>
+            <div class="row question">
+                <h1 class="h1" style="color:#000;" id="top1"></h1> 
+            </div>
+            <div class="row question">
+                <h1 class="h1" style="color:#000;" id="top2"></h1> 
+            </div>
+            <div class="row question">
+                <h1 class="h1" style="color:#000;" id="top3"></h1> 
+            </div>
+            <div class="row question">
+                <h1 class="h1" style="color:#000;" id="top4"></h1> 
+            </div>
+            <div class="fixed-bottom" style="margin: 20px;">
+                <div class="row">
+                    <div class="col-md-6 text-center" style="height:5em;padding: 4px;">
+                        <button id="A" name="singlebutton" class="btn btn-primary answer answer-A">A</button> 
+                    </div>
+                    <div class="col-md-6 text-center" style="height:5em;padding: 4px;">
+                        <button id="B" name="singlebutton" class="btn btn-primary answer answer-B">B</button> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 text-center" style="height:5em;padding: 4px;">
+                        <button id="C" name="singlebutton" class="btn btn-primary answer answer-C">C</button> 
+                    </div>
+                    <div class="col-md-6 text-center" style="height:5em;padding: 4px;">
+                        <button id="D" name="singlebutton" class="btn btn-primary answer answer-D">D</button> 
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <div id="result">
+            <div class="pos-f-t">
+              <nav class="navbar navbar-dark bg-dark">
+                <div class="col-md-12 text-center">
+                <h1 class="h1" style="color:#fff;" id="questionNumber"></h1> 
+                </div>
+              </nav>
             </div>
             <div class="row question">
                 <h1 class="h1" style="color:#000;" id="question"></h1> 
@@ -92,6 +93,7 @@
             <br>
         </div>
 
+
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -100,97 +102,71 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+
     <script>
-        var $jq = jQuery.noConflict();
-        var questionNumber = 1;
-        var numQuestions = 2;
 
-        var t;
-        function waitingMode()
+        var url = 'http://' + window.location.hostname+':3000';
+        console.log('[INFO] url = ',url);
+        var socket = io.connect();
+        const roomID = "<%= roomID%>";
+        var questionNumber = 0;
+        var questionsPackId = '001';
+
+        function requestQuestion()
         {
-            $("#waiting").show();
-            t = setInterval(function() {
-                $jq.ajax({
-                    type: 'GET',
-                    url: '/lobbyData/players?roomID=<%= roomID%>',
-                    dataType: 'text',
-                    success: function(data) {
-                        console.log('Interval');
-                        if (data == null) {
-                            console.log('[ERROR] Can not onnect to server');
-                        }else {
-                            $("#numPlayers").html(Object.keys(JSON.parse(data)).length.toString()+' players');
-                        }
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        // alert(xhr.status);
-                        // alert(thrownError);
+            questionNumber++;
+            socket.emit('host',{
+                state: 1,
+                roomID:roomID,
+                questionsPackId:questionsPackId,
+                questionNumber:questionNumber.toString()
+            });
+        }
+
+        socket.on('host',function(data){ 
+            console.log('[INFO] Receive a socket');
+            var state =data.state; 
+            console.log('[DEBUG] data = ', data);
+            if(state==1){
+                $("#playing").show();
+                //reset progress bar
+                $("#progressBar").css('width','0%');
+                // $("#numPlayers").html(Object.keys(JSON.parse(data)).length.toString()+' players');
+                $("#A").html(data.a);
+                $("#B").html(data.b);
+                $("#C").html(data.c);
+                $("#D").html(data.d);
+                $("#questionNumber").html("Question " + questionNumber.toString());
+                $("#question").html(data.question);
+                limit = data.limit;
+                currentTime=0;
+                var p = setInterval(function(){
+                    var percentage=currentTime/limit*100;
+                    currentTime = currentTime + 1;
+                    console.log(percentage);
+                    if(percentage<=100){
+                        $("#progressBar").css('width',percentage.toString()+'%');
                     }
-                }) // End of AJAX
-            }, 1000);
-        }
-
-        waitingMode();
-
-        function startGame(){
-            clearInterval(t);
-            $("#waiting").hide();
-            $("#playing").show();
-
-            displayQuestion();
-            
-        }
-
+                }, 1000);
+                setTimeout(function(){
+                    clearInterval(p);
+                    requestQuestion();
+                }, 1000*(limit+2));
+            }else if(state==2){
+                
+            }else if(state==3){
+                // endgame
+            }
+        });
 
         function displayQuestion() {
-            $jq.ajax({
-                type: 'GET',
-                url: '/lobbyData/question?roomID=<%= roomID %>&questionPacksId=<%= questionPacksId %>&questionNumber=' + questionNumber.toString(),
-                dataType: 'text',
-                success: function(data) {
-                    data = JSON.parse(data);
-                    if (data == null) {
-                        console.log('[ERROR] Can not onnect to server');
-                    }else {
-                        //reset progress bar
-                        $("#progressBar").css('width','0%');
-                        // $("#numPlayers").html(Object.keys(JSON.parse(data)).length.toString()+' players');
-                        $("#A").html(data.a);
-                        $("#B").html(data.b);
-                        $("#C").html(data.c);
-                        $("#D").html(data.d);
-                        $("#questionNumber").html("Question " + questionNumber.toString());
-                        $("#question").html(data.question);
-                        limit = data.limit;
-                        currentTime=0;
-                        var p = setInterval(function(){
-                            var percentage=currentTime/limit*100;
-                            currentTime = currentTime + 1;
-                            console.log(percentage);
-                            if(percentage<=100){
-                                $("#progressBar").css('width',percentage.toString()+'%');
-                            }
-                        }, 1000);
-                        setTimeout(function(){
-                            clearInterval(p);
-                            //TODO: Show players result
-                            //Next question
-                            if (questionNumber < numQuestions) {
-                                questionNumber++;
-                                displayQuestion();
-                            }
-                            else {
-                                alert("Game end!");
-                            }
-                        }, 1000*(limit+2));
-                    }
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    // alert(xhr.status);
-                    // alert(thrownError);
-                }
-            }); // End of AJAX
+
         }
+
+
+        // Running first mode
+        requestQuestion();
     
     </script>
 

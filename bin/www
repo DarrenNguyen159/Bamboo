@@ -5,8 +5,9 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('acbwinproject:server');
+// var debug = require('debug')('acbwinproject:server');
 var http = require('http');
+var socket = require('../websocket/socket');
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +22,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+socket.setup(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -87,5 +89,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  // debug('Listening on ' + bind);
 }

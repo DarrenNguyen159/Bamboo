@@ -14,7 +14,8 @@
     "firebase": "^5.8.5",
     "firebase-admin": "^7.2.0",
     "firebaseui": "^3.5.2",
-    "nodemon": "^1.18.11"
+    "nodemon": "^1.18.11",
+    "socket.io": "^2.2.0"
   },
   "keywords": [
     "node",

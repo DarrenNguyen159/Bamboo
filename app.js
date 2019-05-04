@@ -44,7 +44,7 @@ app.use('/createQuestionPacks', require('./routes/createQuestionPacks'));
 // API
 app.use('/test', require('./api/test'));
 app.use('/newLobby', require('./api/newLobby'));
-app.use('/lobbyData', require('./api/lobbyData'));
+// app.use('/lobbyData', require('./api/lobbyData'));
 
 // var lobbyCreator = require('./scripts/createLobby');
 // app.get('/newlobby', function(req, res) {
