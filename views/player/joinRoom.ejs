@@ -59,6 +59,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
 
     <script src="/javascript/config.js"></script>
     <script>
@@ -76,6 +77,14 @@
         const roomID = '<%= roomID%>';
         console.log('[DEBUG] room ID = '+ roomID);
 
+        var socket = io.connect();
+        function joinRoomSocket(info){
+            socket.emit('player',{
+                state:3,
+                roomID:info.roomID,
+                name:info.name
+            });
+        }
 
         var $jq = jQuery.noConflict();
         function enterRoomAsTemporaryUser(){    
@@ -96,12 +105,7 @@
                     console.log('[DEBUG]');
                     console.log(data.isValidNickName);
                     if(data.isValidNickName){
-                        // $jq.cookie('uid','player22', {
-                        //     expires: 10 // expires in 10 days
-                        // });
-                        // $jq.cookie('roomID',roomID, {
-                        //     expires: 10 // expires in 10 days
-                        // });
+                        joinRoomSocket({name:nickName,roomID:roomID});
                         window.location.href = '/player/gameView';
                     }else{
                         document.getElementById('message').innerHTML = 'Nick name existed !';
@@ -130,6 +134,7 @@
                             console.log('[DEBUG]');
                             console.log(data.isValidNickName);
                             if(data.isValidNickName){
+                                joinRoomSocket({name:nickName,roomID:roomID});
                                 window.location.href = '/player/gameView';
                             }else{
                                 document.getElementById('message').innerHTML = 'Nick name existed !';

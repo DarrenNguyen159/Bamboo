@@ -3,38 +3,22 @@ var lobbyData = require('../api/lobbyData');
 
 var NUM_TOP = 4;
 
-/*
-tmp
-if(data.state==0){
-				// get player info 
-				lobbyData.getPlayers(
-					(rs,info)=>{
-						socket.emit('host',{
-							state:0,
-							players: rs
-						});
-					},
-					()=>{},
-					{roomID: data.roomID}
-				);
-
-			}else 
-			*/
-
 module.exports.setup = function(server){
 	var io = socket(server);
 	console.log('[INFO] Set up websocket !');
 
 	var playersSockets = {};
 
+	// io.on('disconnect', (socket)=>{
+	// 	console.log('[INFO] Disconnect socket', socket.id);
+	// });
+
 	io.on('connection', (socket)=>{
 
 		console.log('[INFO] Made socket connection', socket.id);
 
 		socket.on('playerCheckIn',function(data){
-			if(data.roomID && data.player){
-				socket.id = data.roomID +'-'+data.player;
-			}
+			// do something
 		});
 
 		// Handle event 'host'
@@ -122,33 +106,80 @@ module.exports.setup = function(server){
 			console.log('[] PLAYER DATA =', data);
 
 			if(data.state==1){
-
-				var roomID = data.roomID;
-				var questionNumber = data.questionNumber;
-				var answer = data.answer;
-				var player = data.player;
-
 				// check roomID, current questionNumber is being played
 				lobbyData.answeringQuestion(
 					function(){
-
+						// do nothing
 					},
 					{
-						roomID: roomID,
-						questionNumber: questionNumber,
-						answer: answer,
-						player: player
+						roomID: data.roomID,
+						questionNumber: data.questionNumber,
+						answer: data.answer,
+						player: data.player
 					}
 				);
+			}else if(data.state==3){
+				// just join room 
+				io.sockets.emit('lobby',{
+					state:3,
+					name: data.name,
+					roomID: data.roomID
+				});
+			}
 
-				// check correct answer ? 
 
-				// Add: point, answerStatus, update 
 
-				// 
+		});
 
+		socket.on('lobby',function(data){
+			console.log('[] LOBBY DATA', data);
+
+			if(data.state==0){
+				lobbyData.checkOwnerLobby(
+					function(info){
+						socket.emit('lobby',{
+							state:4,
+							uid:info.uid,
+							roomID:info.roomID
+						});
+					},
+					{
+						uid: data.uid,
+						roomID: data.roomID,
+					}
+				);
+			}else if(data.state==1){
+				// get question packs of this owner
+				lobbyData.getQuestionsPackData(
+					function(info){
+						socket.emit('lobby',{
+							state:1,
+							questionPacks:info.questionPacks,
+							roomID:info.roomID
+						});
+					},
+					{
+						uid: data.uid,
+						roomID: data.roomID
+					}
+				);
+			}else if(data.state==2){
+				// get players 
+				lobbyData.getPlayers(
+					function(info){
+						socket.emit('lobby',{
+							state:2,
+							players:info.players,
+							roomID:info.roomID
+						});
+					},
+					{
+						roomID: data.roomID
+					}
+				);
 			}
 
 		});
+
 	});
 }

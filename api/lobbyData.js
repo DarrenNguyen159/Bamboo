@@ -1,27 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var database = require('../routes/database');
+var fs = require('fs'); // required for file serving
 
 const POINTS_PER_QUESTION = 1000;
-
-router.get('/players', function (req, res, next) {
-  var roomID = req.query.roomID;
-  if (roomID) {
-    // roomID is required ! If roomID is undefined, redirect to home page
-    database.ref('/Rooms/r' + roomID+'/players').once('value').then(function (snapshot) {
-      var players = snapshot.val();
-      if (snapshot.val()) {
-        // Room existed ! Render page to enter nick name 
-        res.json(players);
-      } else {
-        res.json({});
-      }
-    });
-  } else {
-    // roomID is undefined
-    res.json({});
-  }
-});
 
 module.exports = {
   /*
@@ -67,12 +49,9 @@ module.exports = {
 
     database.ref('/QuestionPacks/q' + questionsPackId + '/questions/question' + questionNumber).once('value').then(function (snapshot) {
       var result = snapshot.val();
-      console.log('[] here 1?', result);
       if(result){
-        console.log('[] here 2?');
         answer = result.answer;
         database.ref('/Rooms/r'+roomID+'/players').once('value').then(function(snapshot){
-          console.log('[] here 3?');
           var players = snapshot.val();
           var result = {};
 
@@ -187,6 +166,80 @@ module.exports = {
         }
       }
     });
+  },
+
+  checkOwnerLobby : function(rfunc, info){
+    var roomID = info.roomID;
+    var uid = info.uid;
+
+    var notOwnerMessage={roomID:roomID, uid:uid};
+
+    console.log(notOwnerMessage);
+
+    // check valid roomID and questionNumber 
+    database.ref('/Rooms/r'+roomID + '/authorId').once('value').then(function (snapshot) {
+      var authorId = snapshot.val();
+      if(authorId){
+        if(authorId != uid){
+          rfunc(notOwnerMessage);
+        }
+      }else{
+        rfunc(notOwnerMessage);
+      }
+    });
+  },
+
+  getQuestionsPackData : function(func, info){
+
+    var uid = info.uid;
+    var roomID = info.roomID;
+
+    if (uid) {
+      database.ref('/QuestionPacks').once('value').then(function (snapshot) {
+        var questionPacks = snapshot.val();
+        if (questionPacks) {
+          var result = {};
+          for(var pack in questionPacks){
+            var authors = questionPacks[pack].authors;
+            for(var authorId in authors){
+              if(authors[authorId]== uid){
+                var quesPack = questionPacks[pack];
+                result[pack] = {
+                  description: quesPack.description,
+                  title: quesPack.title,
+                  imageURL: quesPack.imageURL
+                };
+                break;
+              }
+            }
+          }
+          func({questionPacks:result, roomID:roomID});
+        } else {
+          func({});
+        }
+      });
+    } else {
+      func({});
+    }
+  },
+
+  getPlayers : function(func, info){
+    var roomID = info.roomID;
+    if (roomID) {
+      // roomID is required ! If roomID is undefined, redirect to home page
+      database.ref('/Rooms/r' + roomID+'/players').once('value').then(function (snapshot) {
+        var players = snapshot.val();
+        if (snapshot.val()) {
+          // Room existed ! Render page to enter nick name 
+          func({players:players, roomID:roomID});
+        } else {
+          func({});
+        }
+      });
+    } else {
+      // roomID is undefined
+      func({});
+    }
   },
 
   router: router,

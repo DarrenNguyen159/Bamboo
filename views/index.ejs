@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
     <head>
-        <title></title>
+        <title><%= title%></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -49,7 +49,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
@@ -58,6 +58,16 @@
 
     <script>
         var $jq = jQuery.noConflict();
+        var config = {
+            apiKey: "AIzaSyBKheAnyvSFQtaMUwlaQ_7T-q5-Z9hmuQc",
+            authDomain: "bamboo-cda5f.firebaseapp.com",
+            databaseURL: "https://bamboo-cda5f.firebaseio.com",
+            projectId: "bamboo-cda5f",
+            storageBucket: "bamboo-cda5f.appspot.com",
+            messagingSenderId: "550416420066"
+        };
+        firebase.initializeApp(config);
+
         function enterRoom(){    
             var roomID = document.getElementById('roomID').value;
             console.log('[SENT]'+ roomID);
@@ -83,24 +93,41 @@
             });
         }
         function createLobby(){
-            $jq.ajax({
-                type: 'GET',
-                url: '/newLobby',
-                dataType: 'text',
-                success: function(data) {
-                    var lobbyJSON = $jq.parseJSON(data);
-                    if (lobbyJSON == null) {
-                        alert("Failed: Create a new lobby! Try again.");
-                    }
-                    else {
-                        window.location.href = "/lobby/"  + lobbyJSON.id;
-                    }
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    // alert(xhr.status);
-                    // alert(thrownError);
+            // Check user signed-in
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user && !user.isAnonymous) {
+
+                    var uid = user.uid;
+
+                    // console.log('[DEBUG] user info:');
+                    console.log(user.uid);
+
+                    $jq.ajax({
+                        type: 'POST',
+                        url: '/newLobby',
+                        dataType: 'json',
+                        data: {uid: uid},
+                        success: function(data) {
+                            if (data.status != "OK") {
+                                alert("Failed: Create a new lobby! Try again.");
+                            }
+                            else {
+                                window.location.href = "/lobby/"  + data.roomID;
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                        }
+                    }); // End of AJAX
+
+                } else {
+                    // User is signed out.
+                    alert("You have not signed-in yet :(");
+                    // Redirect to authen
+                    window.location.href = '/authen';
+                // ...
                 }
-            }) // End of AJAX
+            });
+            
         }
     </script>
 

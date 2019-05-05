@@ -22,21 +22,34 @@ function randomId() {
   return randStr;
 }
 
-router.get('/', function (req, res) {
+router.post('/', function (req, res) {
+
+  // BUGS: not fix yet, it randoms only 1 time, if random number existed => error.
+
+  var uid = req.body.uid;
   var randId = randomId();
+    
   database.ref('/Rooms/r' + randId).once('value').then(function(snapshot) {
     var data = snapshot.val();
     if (data == null) {
       // Valid new Id
-      var roomData = {id:randId, status: "lobby"};
+      var roomData = {
+        id:randId, 
+        status: {
+          status:"lobby",
+          questionNumber:"0"
+        },
+        authorId:uid
+      };
       database.ref('/Rooms/r' + randId).set(roomData);
-      res.send(roomData);
+      res.json({status:"OK",roomID:randId});
     }
     else {
       // Invalid new Id
-      res.send(null);
+      res.json({status:"ERROR"});
     }
   });
+
 });
 
 module.exports = router;
