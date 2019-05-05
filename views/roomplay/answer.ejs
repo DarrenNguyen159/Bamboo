@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bamboo!</title>
+        <link rel = "stylesheet" href = "/style/player/playerGameView.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+    
+    <body>        
+        <div class="container-fluid">
+        <div class="page-header">
+                <% include ../partial/header %>
+                <hr class="style-two"/>
+        </div>    
+        <div class="fixed-bottom">
+        <div class="btn-group">
+            <button onclick = "answerSubmitted(1)" id = "answer1" class = "button">
+                Your Answer is A    
+            </button>
+            <button onclick = "answerSubmitted(2)" id = "answer2" class = "button">
+                Your Answer is B        
+            </button>
+        </div>
+        <div class="btn-group">
+
+            <button onclick = "answerSubmitted(3)" id = "answer3" class = "button">
+                Your Answer is C
+            </button>
+            <button onclick = "answerSubmitted(4)" id = "answer4" class = "button">
+                Your Answer is D
+            </button>
+        </div>
+        </div>
+        </div>
+    </body>
+    <script>
+        function answerSubmitted(ans) {
+            if (ans == 1){
+                window.location.href = "../correct";
+            }
+            if (ans == 2){
+                window.location.href = "../incorrect";
+            }
+            if (ans == 3){
+                console.log('Your ans: C')
+            }
+            else{
+                console.log('Your ans: D')
+            }
+        }
+    </script>
+</html>
