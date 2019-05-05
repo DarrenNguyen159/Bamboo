@@ -4,6 +4,25 @@ var database = require('../routes/database');
 
 const POINTS_PER_QUESTION = 1000;
 
+router.get('/players', function (req, res, next) {
+  var roomID = req.query.roomID;
+  if (roomID) {
+    // roomID is required ! If roomID is undefined, redirect to home page
+    database.ref('/Rooms/r' + roomID+'/players').once('value').then(function (snapshot) {
+      var players = snapshot.val();
+      if (snapshot.val()) {
+        // Room existed ! Render page to enter nick name 
+        res.json(players);
+      } else {
+        res.json({});
+      }
+    });
+  } else {
+    // roomID is undefined
+    res.json({});
+  }
+});
+
 module.exports = {
   /*
     Params: 
@@ -169,6 +188,8 @@ module.exports = {
       }
     });
   },
+
+  router: router,
 
 
 };

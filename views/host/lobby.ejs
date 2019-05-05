@@ -10,7 +10,7 @@
     <body>
     <nav class="navbar navbar-light bg-light">
         <p>Lobby ID: <span id="roomID"> <%= lobbyID %> </span></p>
-        <button type="button" class="btn btn-success startButton" onclick="enterWaitingRoom()">Enter Waiting Room</button>
+        <button type="button" class="btn btn-success startButton" onclick="startGame()">START GAME</button>
         <ul class="nav justify-content-end">
             <li class="nav-item">
                 <p >Host: <span id="hostname"> hostname </span></p>
@@ -28,7 +28,6 @@
                 </div>
                 <div class="alert alert-success playerList" role="alert">
                     <ul id="playerList">
-                        <li class="badge badge-success">Player 1</li>
                     </ul>
                 </div>
                 <div class="alert alert-secondary" role="alert">
@@ -144,8 +143,8 @@
                 var uid = user.uid;
                 var providerData = user.providerData;
 
-                console.log('[DEBUG] user info:');
-                console.log(user);
+                // console.log('[DEBUG] user info:');
+                // console.log(user);
 
                 // change hostname to displayName
                 $jq("#hostname").text(displayName);
@@ -192,6 +191,7 @@
             let childStr = "";
             for (var key in players) {
                 // alert(JSON.stringify(player));
+                console.log('players', players[key]);
                 childStr += "<li class=\"badge badge-success\">" + players[key]['name'] + "</li>";
             }
             playerList.html(childStr);
@@ -201,26 +201,30 @@
             $jq.ajax({
                 type: 'GET',
                 url: '/lobbyData/players?roomID=<%= lobbyID %>',
-                dataType: 'text',
+                dataType: 'json',
                 success: function(data) {
-                    var playersJSON = $jq.parseJSON(data);
-                    // alert(JSON.stringify(playersJSON));
+                    console.log('data', data);
+                    var playersJSON = data ;//$jq.parseJSON(data);
+                    // // alert(JSON.stringify(playersJSON));
                     updatePlayersList(playersJSON);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);
-                    alert(thrownError);
+                    // alert(thrownError);
+                    console.log('[ERROR]');
                 }
             }) // End of AJAX
         }
 
-        function enterWaitingRoom(){
+        function startGame(){
             window.location.href = '/host/gameView?roomID=<%= lobbyID%>';
         }
 
-        setInterval(function() {
-            getPlayersData();
-        }, 1000);
+        getPlayersData();
+
+        // setInterval(function() {
+        //     getPlayersData();
+        // }, 1000);
 
     </script>
 
