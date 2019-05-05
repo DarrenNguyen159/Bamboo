@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/style/host/lobby.css">
+    <link rel="stylesheet" type="text/css" href="/style/loader.css">
 </head>
 
 <body>
+    <div id="loading-animation" class="loading">Loading&#8230;</div>
+
     <nav class="navbar navbar-light bg-light">
         <p>Create Question Packs </span></p>
         <ul class="nav justify-content-end">
@@ -27,7 +30,8 @@
             <div class="col-sm-4">
                 <div class="card">
                     <img src="./images/no-image-available.jpg" class="card-img-top" id="image" alt="..." onclick="setImage()">
-                    <input type='file' id="imgInp" hidden/>
+                    <input accept=”.png” type='file' id="imgInp" hidden/>
+                    <span id="imageUrl" hidden></span>
                     <div class="card-body">
                         <!-- <h5 class="card-title">Card title</h5> -->
                         <div class="input-group mb-3">
@@ -66,8 +70,9 @@
                                         <div class="col-sm-2">
                                             <h5 class="card-title">Question</h5>
                                         </div>
-                                        <div class="col-sm-2 mt-5">
-                                            
+                                        <div class="col-sm-3 mt-2">
+                                            <img src="./images/no-image-available.jpg" class="card-img-top" id="imageQ1" alt="..."">
+                                            <input id="qImage1" class="form-control limit qImage" type="text" />
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
@@ -80,7 +85,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label>Time limit</label>
                                                 <input class="form-control limit" type="number" />
@@ -152,20 +157,27 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
 
     <script src="/javascript/config.js"></script>
     <script>
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        var uname;
+        var ucode;
         var $jq = jQuery.noConflict();
         // Check user signed-in
         firebase.auth().onAuthStateChanged(function (user) {
             if (user && !user.isAnonymous) {
                 // User is signed in.
                 var displayName = user.displayName;
+                uname = displayName;
                 var email = user.email;
                 var emailVerified = user.emailVerified;
                 var photoURL = user.photoURL;
                 var isAnonymous = user.isAnonymous;
                 var uid = user.uid;
+                ucode = uid;
                 var providerData = user.providerData;
 
                 console.log('[DEBUG] user info:');
@@ -180,18 +192,10 @@
                 // User is signed out.
                 alert("You have not signed-in yet :(");
                 // Redirect to authen
-                // window.location.href = '/';
+                window.location.href = '/authen/create';
                 // ...
             }
         });
-
-        function signOut() {
-            firebase.auth().signOut().then(function () {
-                console.log('Signed Out');
-            }, function (error) {
-                console.error('Sign Out Error', error);
-            });
-        }
 
         function setImage() {
             $jq('#imgInp').click();
@@ -205,14 +209,26 @@
                 reader.onload = function(e) {
                     $jq('#image').attr('src', e.target.result);
                 }
-
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function urlExists(url) {
+            var http = new XMLHttpRequest();
+            http.open('HEAD', url, false);
+            http.send();
+            return http.status!=404;
         }
 
         $jq(document).ready(function() {
             $jq("#imgInp").change(function() {
                 readURL(this);
+            });
+            $jq("#loading-animation").hide();
+            
+            $jq("#qImage1").on('input', function() { 
+                let qImageurl = $jq(this).val() // get the current value of the input field.
+                $jq("#imageQ1").attr('src', qImageurl);
             });
         });
 
@@ -221,13 +237,27 @@
         function AddQuestion() {
             nextQ++;
             let questionList = $jq("#question-list");
-            childStr = "<div id=\""+ nextQ + "\" class=\"row\"> <div class=\"card col-sm-12\"> <div class=\"card-body\"> <div class=\"row d-flex justify-content-between ml-1 mr-1\"> <div class=\"col-sm-2\"> <h5 class=\"card-title\">Question</h5> <button type=\"button\" class=\"btn btn-danger\" onclick=\"Delete(" + nextQ + ")\">Delete</button></div> <div class=\"col-sm-2 mt-5\"> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Answer</label> <select class=\"form-control answer\"> <option value=\"A\" selected=\"selected\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> </select> </div> </div> <div class=\"col-sm-3\"> <div class=\"form-group\"> <label>Time limit</label> <input class=\"form-control limit\" type=\"number\" /> </div> </div> </div> <div class=\"form-group mt-2\"> <textarea class=\"form-control question-text-edit\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">A</span> </div> <input type=\"text\" class=\"form-control A\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">B</span> </div> <input type=\"text\" class=\"form-control B\" /> </div> </div> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">C</span> </div> <input type=\"text\" class=\"form-control C\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">D</span> </div> <input type=\"text\" class=\"form-control D\" /> </div> </div> </div> </div> </div> </div>";
+            childStr = "<div id=\"q"+ nextQ + "\" class=\"row\"> <div class=\"card col-sm-12\"> <div class=\"card-body\"> <div class=\"row d-flex justify-content-between ml-1 mr-1\"> <div class=\"col-sm-2\"> <h5 class=\"card-title\">Question</h5> <button type=\"button\" class=\"btn btn-danger\" onclick=\"Delete(" + nextQ + ")\">Delete</button></div> <div class=\"col-sm-3 mt-2\"> <img src=\"./images/no-image-available.jpg\" class=\"card-img-top qImage\" id=\"imageQ" + nextQ + "\" alt=\"...\"><input id=\"qImage" + nextQ + "\" class=\"form-control limit\" type=\"text\" /> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Answer</label> <select class=\"form-control answer\"> <option value=\"A\" selected=\"selected\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> </select> </div> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Time limit</label> <input class=\"form-control limit\" type=\"number\" /> </div> </div> </div> <div class=\"form-group mt-2\"> <textarea class=\"form-control question-text-edit\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">A</span> </div> <input type=\"text\" class=\"form-control A\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">B</span> </div> <input type=\"text\" class=\"form-control B\" /> </div> </div> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">C</span> </div> <input type=\"text\" class=\"form-control C\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">D</span> </div> <input type=\"text\" class=\"form-control D\" /> </div> </div> </div> </div> </div> </div>";
             questionList.append(childStr);
+            $jq("#qImage" + nextQ).on('input', function() { 
+                let id = $jq(this).attr('id');
+                var idNum = id[id.length -1];
+                let qImageurl = $jq(this).val() // get the current value of the input field.
+                $jq("#imageQ" + idNum).attr('src', qImageurl);
+
+            });
         }
 
         function Delete(id) {
             let questionList = $jq("#q" + id);
             questionList.remove();
+        }
+
+        function imageExists(image_url){
+            var http = new XMLHttpRequest();
+            http.open('HEAD', image_url, false);
+            http.send();
+            return http.status != 404;
         }
 
         function CheckAndGet() {
@@ -251,6 +281,7 @@
             var validTimeLimit = true;
             qList.each(function(index) {
                 let question = $jq(this).find("textarea").val();
+                let imageURL = $jq(this).find(".qImage").val();
                 let a = $jq(this).find(".A").val();
                 let b = $jq(this).find(".A").val();
                 let c = $jq(this).find(".A").val();
@@ -268,6 +299,7 @@
                 }
                 questions['question' + index] = {
                     question: question,
+                    imageURL: imageURL,
                     a: a,
                     b: b,
                     c: c,
@@ -280,9 +312,17 @@
             if (validTimeLimit == false) {
                 return false;
             }
-            
+
+            var authorName = $jq("#hostname").text();
+            var packImageURL = $jq('#imageUrl').text();
+
             json = {
                 title: title,
+                author: {
+                    name: uname,
+                    authorid: ucode
+                },
+                imageURL: packImageURL,
                 description: description,
                 questions: questions
             };
@@ -290,18 +330,22 @@
         }
         
         function Submit() {
-            var json = CheckAndGet();
-            if (json != false) {
-                alert(JSON.stringify(json));
-            }
+            UploadImage($jq('#title').val());
+            $jq("#loading-animation").show();
+            setTimeout(function(){ 
+                $jq("#loading-animation").hide();
+                var json = CheckAndGet();
+                if (json != false) {
+                    alert(JSON.stringify(json));
+                }
 
-            $jq.ajax({
+                $jq.ajax({
                 type: 'POST',
-                url: '/api/createPacks',
+                url: '/createPacks',
                 dataType: 'json',
                 data: json,
                 success: function(result) {
-                    alert("Gửi thành công!");
+                    alert("Gửi thành công! " + result.response);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);
@@ -309,6 +353,38 @@
                 }
             }) // End of AJAX
 
+            }, 1500);
+
+        }
+
+        function UploadImage(fileInput) {
+            // Upload image
+            var file = $jq("#imgInp").prop('files')[0];
+            // var packImageRef = storageRef.child("" + ucode + "/packsImage/" + $jq("#title").val());
+            var uploadTask = storageRef.child("" + ucode + "/packsImage/" + fileInput).put(file);
+            uploadTask.on('state_changed', function(snapshot){
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED: // or 'paused'
+                        console.log('Upload is paused');
+                        break;
+                    case firebase.storage.TaskState.RUNNING: // or 'running'
+                        console.log('Upload is running');
+                        break;
+                }
+                }, function(error) {
+                    // Handle unsuccessful uploads
+                }, function() {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    console.log('File available at', downloadURL);
+                    $jq('#imageUrl').text(downloadURL);
+                });
+            });
         }
 
     </script>

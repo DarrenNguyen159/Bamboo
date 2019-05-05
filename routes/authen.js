@@ -11,4 +11,8 @@ router.get('/:id', function(req, res, next) {
     res.render('login', { title: 'Log in', message: "", lobbyID: id });
 });
 
+router.get('/create', function(req, res, next) {
+    res.render('login', { title: 'Log in', message: "", lobbyID: "create" });
+});
+
 module.exports = router;
