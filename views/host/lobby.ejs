@@ -191,7 +191,7 @@
             let childStr = "";
             for (var key in players) {
                 // alert(JSON.stringify(player));
-                console.log('players', players[key]);
+                // console.log('players', players[key]);
                 childStr += "<li class=\"badge badge-success\">" + players[key]['name'] + "</li>";
             }
             playerList.html(childStr);
@@ -203,7 +203,7 @@
                 url: '/lobbyData/players?roomID=<%= lobbyID %>',
                 dataType: 'json',
                 success: function(data) {
-                    console.log('data', data);
+                    // console.log('data', data);
                     var playersJSON = data ;//$jq.parseJSON(data);
                     // // alert(JSON.stringify(playersJSON));
                     updatePlayersList(playersJSON);
@@ -211,7 +211,7 @@
                 error: function(xhr, ajaxOptions, thrownError) {
                     // alert(xhr.status);
                     // alert(thrownError);
-                    console.log('[ERROR]');
+                    // console.log('[ERROR]');
                 }
             }) // End of AJAX
         }
@@ -222,9 +222,9 @@
 
         getPlayersData();
 
-        // setInterval(function() {
-        //     getPlayersData();
-        // }, 1000);
+        setInterval(function() {
+            getPlayersData();
+        }, 1000);
 
     </script>
 
