@@ -180,10 +180,11 @@
                 // User is signed out.
                 alert("You have not signed-in yet :(");
                 // Redirect to authen
-                // window.location.href = '/';
+                window.location.href = '/authen/create';
                 // ...
             }
         });
+
 
         function signOut() {
             firebase.auth().signOut().then(function () {
@@ -280,9 +281,15 @@
             if (validTimeLimit == false) {
                 return false;
             }
-            
+
+            // var authorName = $jq("#hostname").text();
+
             json = {
                 title: title,
+                author: {
+                    authorid: authorName
+                },
+                imageURL: "nothing",
                 description: description,
                 questions: questions
             };
@@ -295,19 +302,19 @@
                 alert(JSON.stringify(json));
             }
 
-            $jq.ajax({
-                type: 'POST',
-                url: '/api/createPacks',
-                dataType: 'json',
-                data: json,
-                success: function(result) {
-                    alert("Gửi thành công!");
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    // alert(xhr.status);
-                    alert(thrownError);
-                }
-            }) // End of AJAX
+            // $jq.ajax({
+            //     type: 'POST',
+            //     url: '/createPacks',
+            //     dataType: 'json',
+            //     data: json,
+            //     success: function(result) {
+            //         alert("Gửi thành công! " + result.response);
+            //     },
+            //     error: function(xhr, ajaxOptions, thrownError) {
+            //         // alert(xhr.status);
+            //         alert(thrownError);
+            //     }
+            // }) // End of AJAX
 
         }
 
