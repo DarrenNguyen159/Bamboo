@@ -1,5 +1,66 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    -webkit-animation: bgcolor 20s infinite;
+    animation: bgcolor 10s infinite;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+    font-size: 2em;
+}
+
 .waiting {
     margin-top: 10rem;
+}
+
+.center{
+    text-align: center;
+}
+
+.top-scoreboard {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.nameTop {
+    text-align: left;
+}
+
+.scoreTop {
+    text-align: right !important;
+}
+
+.answers-result {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -20%;
+    margin-bottom: 20%;
+    width: 50%;
+    padding: 10px;
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+}
+
+.count-text {
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    font-size: 28pt;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.answers-bar-bg {
+    height: 40px;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0);
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 .loader {
@@ -14,15 +75,6 @@
     height: 40px;
     -webkit-animation: spin 1.5s linear infinite; /* Safari */
     animation: spin 1.5s linear infinite;
-}
-
-body {
-    font-family: 'Montserrat', sans-serif;
-    -webkit-animation: bgcolor 20s infinite;
-    animation: bgcolor 10s infinite;
-    -webkit-animation-direction: alternate;
-    animation-direction: alternate;
-    font-size: 2em;
 }
 
 .question {
