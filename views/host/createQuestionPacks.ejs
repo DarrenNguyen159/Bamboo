@@ -294,6 +294,21 @@
             if (json != false) {
                 alert(JSON.stringify(json));
             }
+
+            $jq.ajax({
+                type: 'POST',
+                url: '/api/createPacks',
+                dataType: 'json',
+                data: json,
+                success: function(result) {
+                    alert("Gửi thành công!");
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    // alert(xhr.status);
+                    alert(thrownError);
+                }
+            }) // End of AJAX
+
         }
 
     </script>
