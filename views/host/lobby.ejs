@@ -75,6 +75,7 @@
                     <img class="card-img-top" id="pack-img" src="/images/no-image-available.jpg" alt="Card image cap">
                     <div class="card-body" id="desc-body" >
                         <h5 class="card-title" id="title">Pack Title</h5>
+                        <h5 class="card-title" id="packId" style="display:None;">001</h5>
                         <p class="card-text" id="description">This is an example description. This is an example description. This is an
                             example description. This is an example description. This is an example description. This is
                             an example description. This is an example description. This is an example description. </p>
@@ -162,12 +163,20 @@
                         var questionPacks = data.questionPacks;
                         var parent = $jq("#questionPacks");
                         var childStr = "";
+                        if(Object.keys(questionPacks).length >= 1){
+                            let key = Object.keys(questionPacks)[0];
+                            $jq("#pack-img").attr('src',"/images/" + key + "/" + questionPacks[key].imageURL);
+                            $jq("#title").text(questionPacks[key].title);
+                            $jq("#packId").text(key);
+                            $jq("#description").text(questionPacks[key].description);
+                        }
                         for (let key in questionPacks) {
                             childStr = "<div class=\"card packCard\" id=\"" + key + "\" ><img class=\"card-img-top\" src=\"/images/" + key + "/" + questionPacks[key].imageURL + "\" alt=\"Card image cap\"><div class=\"card-body\"><h5 class=\"card-title\">" + questionPacks[key].title + "</h5></div></div>";
                             parent.append(childStr);
                             $jq("#" + key).click(function(){
                                 $jq("#pack-img").attr('src',"/images/" + key + "/" + questionPacks[key].imageURL);
                                 $jq("#title").text(questionPacks[key].title);
+                                $jq("#packId").text(key);
                                 $jq("#description").text(questionPacks[key].description);
                             });
                         }
@@ -241,7 +250,8 @@
         }
 
         function startGame() {
-            window.location.href = '/host/gameView?roomID=<%= lobbyID%>';
+            var key = $jq("#packId").text();
+            window.location.href = '/host/gameView?roomID='+roomID+'&questionsPackId='+key.slice(1,key.length);
         }
 
     </script>

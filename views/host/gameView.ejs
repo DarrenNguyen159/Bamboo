@@ -167,7 +167,7 @@
         var socket = io.connect();
         const roomID = "<%= roomID%>";
         var questionNumber = 0;
-        var questionsPackId = '001';
+        var questionsPackId = '<%= questionsPackId%>';
 
         $( "#next" ).click(requestQuestion);
 
