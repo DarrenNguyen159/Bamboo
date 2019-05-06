@@ -31,7 +31,7 @@
                 <div class="card">
                     <img src="./images/no-image-available.jpg" class="card-img-top" id="image" alt="..." onclick="setImage()">
                     <input accept=”.png” type='file' id="imgInp" hidden/>
-                    <span id="imageUrl" hidden></span>
+                    <span id="imageUrl"></span>
                     <div class="card-body">
                         <!-- <h5 class="card-title">Card title</h5> -->
                         <div class="input-group mb-3">
@@ -72,7 +72,7 @@
                                         </div>
                                         <div class="col-sm-3 mt-2">
                                             <img src="./images/no-image-available.jpg" class="card-img-top" id="imageQ1" alt="..."">
-                                            <input id="qImage1" class="form-control limit qImage" type="text" />
+                                            <input id="qImage1" class="form-control qImage" type="text" />
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
@@ -237,7 +237,7 @@
         function AddQuestion() {
             nextQ++;
             let questionList = $jq("#question-list");
-            childStr = "<div id=\"q"+ nextQ + "\" class=\"row\"> <div class=\"card col-sm-12\"> <div class=\"card-body\"> <div class=\"row d-flex justify-content-between ml-1 mr-1\"> <div class=\"col-sm-2\"> <h5 class=\"card-title\">Question</h5> <button type=\"button\" class=\"btn btn-danger\" onclick=\"Delete(" + nextQ + ")\">Delete</button></div> <div class=\"col-sm-3 mt-2\"> <img src=\"./images/no-image-available.jpg\" class=\"card-img-top qImage\" id=\"imageQ" + nextQ + "\" alt=\"...\"><input id=\"qImage" + nextQ + "\" class=\"form-control limit\" type=\"text\" /> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Answer</label> <select class=\"form-control answer\"> <option value=\"A\" selected=\"selected\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> </select> </div> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Time limit</label> <input class=\"form-control limit\" type=\"number\" /> </div> </div> </div> <div class=\"form-group mt-2\"> <textarea class=\"form-control question-text-edit\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">A</span> </div> <input type=\"text\" class=\"form-control A\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">B</span> </div> <input type=\"text\" class=\"form-control B\" /> </div> </div> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">C</span> </div> <input type=\"text\" class=\"form-control C\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">D</span> </div> <input type=\"text\" class=\"form-control D\" /> </div> </div> </div> </div> </div> </div>";
+            childStr = "<div id=\"q"+ nextQ + "\" class=\"row\"> <div class=\"card col-sm-12\"> <div class=\"card-body\"> <div class=\"row d-flex justify-content-between ml-1 mr-1\"> <div class=\"col-sm-2\"> <h5 class=\"card-title\">Question</h5> <button type=\"button\" class=\"btn btn-danger\" onclick=\"Delete(" + nextQ + ")\">Delete</button></div> <div class=\"col-sm-3 mt-2\"> <img src=\"./images/no-image-available.jpg\" class=\"card-img-top qImage\" id=\"imageQ" + nextQ + "\" alt=\"...\"><input id=\"qImage" + nextQ + "\" class=\"form-control\" type=\"text\" /> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Answer</label> <select class=\"form-control answer\"> <option value=\"A\" selected=\"selected\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> </select> </div> </div> <div class=\"col-sm-2\"> <div class=\"form-group\"> <label>Time limit</label> <input class=\"form-control limit\" type=\"number\" /> </div> </div> </div> <div class=\"form-group mt-2\"> <textarea class=\"form-control question-text-edit\" id=\"exampleFormControlTextarea1\" rows=\"3\"></textarea> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">A</span> </div> <input type=\"text\" class=\"form-control A\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group mb-3\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">B</span> </div> <input type=\"text\" class=\"form-control B\" /> </div> </div> </div> <div class=\"row\"> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">C</span> </div> <input type=\"text\" class=\"form-control C\" /> </div> </div> <div class=\"col-sm-6\"> <div class=\"input-group\"> <div class=\"input-group-prepend\"> <span class=\"input-group-text\">D</span> </div> <input type=\"text\" class=\"form-control D\" /> </div> </div> </div> </div> </div> </div>";
             questionList.append(childStr);
             $jq("#qImage" + nextQ).on('input', function() { 
                 let id = $jq(this).attr('id');
@@ -283,18 +283,18 @@
                 let question = $jq(this).find("textarea").val();
                 let imageURL = $jq(this).find(".qImage").val();
                 let a = $jq(this).find(".A").val();
-                let b = $jq(this).find(".A").val();
-                let c = $jq(this).find(".A").val();
-                let d = $jq(this).find(".A").val();
+                let b = $jq(this).find(".B").val();
+                let c = $jq(this).find(".C").val();
+                let d = $jq(this).find(".D").val();
                 let answer = $jq(this).find(".answer").val();
                 let limitText = $jq(this).find(".limit").val();
                 let limit = parseInt(limitText);
                 if (limit < 5) {
-                    alert("Limit time is invalid at question " + index);
+                    alert("Limit time is invalid at question " + index + " cant be " + limit);
                     validTimeLimit = false;
                 }
                 if (limitText == "") {
-                    alert("Limit time is not set at question " + index);
+                    alert("Limit time is not set at question " + index + " can't be " + limit);
                     validTimeLimit = false;
                 }
                 questions['question' + index] = {
@@ -353,7 +353,7 @@
                 }
             }) // End of AJAX
 
-            }, 1500);
+            }, 5000);
 
         }
 
