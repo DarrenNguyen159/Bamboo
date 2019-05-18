@@ -49,7 +49,6 @@ router.post('/', function (req, res) {
       res.json({status:"ERROR"});
     }
   });
-
 });
 
 module.exports = router;

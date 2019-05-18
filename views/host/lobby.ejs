@@ -135,6 +135,11 @@
             });
         }
 
+        function create(){
+            console.log('[DEBUG] Navigate to createQuestionPacks');
+            window.location.href = '/createQuestionPacks';
+        }
+
         function getPlayers(uid) {
             socket.emit('lobby', {
                 state: 2,

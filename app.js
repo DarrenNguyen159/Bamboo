@@ -34,39 +34,17 @@ app.use(cookieParser());
 // ----------------------- CONFIGURATION --------------------------------------//
 // router files 
 app.use('/', require('./routes/index'));
-app.use('/testPage', require('./routes/testPage'));
 app.use('/authen', require('./routes/authen'));
 app.use('/lobby', require('./routes/lobby'));
 app.use('/player', require('./routes/player'));
 app.use('/host', require('./routes/host'));
 app.use('/createQuestionPacks', require('./routes/createQuestionPacks'));
+app.use('/cleanDb', require('./routes/testPage'));
 
 // API
-app.use('/test', require('./api/test'));
 app.use('/newLobby', require('./api/newLobby'));
 app.use('/createPacks', require('./api/createQuestion'));
 app.use('/lobbyData', require('./api/lobbyData').router);
-
-// var lobbyCreator = require('./scripts/createLobby');
-// app.get('/newlobby', function(req, res) {
-//   // var ID = (Math.floor(Math.random() * 1001)).toString();
-//   lobbyCreator.createLobby(database ,res);
-// });
-
-// app.get('/lobby/:id', function(req, res) {
-//   var id = req.params['id'];
-//   database.ref('/Rooms/' + id).set({status: 'lobby'});
-//   res.render('lobby', {lobbyID: id});
-// });
-
-// app.get('/authen', function(req,res){
-//   res.render('login', {});
-// });
-
-
-
-
-
 
 // ----------------------- END OF CONFIGURATION --------------------------------//
 
