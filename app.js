@@ -46,6 +46,10 @@ app.use('/test', require('./api/test'));
 app.use('/newLobby', require('./api/newLobby'));
 app.use('/createPacks', require('./api/createQuestion'));
 app.use('/lobbyData', require('./api/lobbyData').router);
+//
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+app.use('/admin', require('./routes/adminLogin'));
 
 // var lobbyCreator = require('./scripts/createLobby');
 // app.get('/newlobby', function(req, res) {

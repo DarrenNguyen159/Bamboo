@@ -206,6 +206,7 @@
             });
         }
 
+        
 
 
         // Check user signed-in
@@ -217,7 +218,7 @@
                 checkingValidLobbyOwner(user.uid);
                 getQuestionsPackData(user.uid);
                 getPlayers(user.uid);
-
+                
                 // change hostname to displayName
                 $jq("#hostname").text(user.displayName);
                 // get new lobby id from Firebase
