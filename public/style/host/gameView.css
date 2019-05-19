@@ -15,6 +15,17 @@ body {
     text-align: center;
 }
 
+.qImage {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.questionImage {
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 20rem;
+}
+
 .top-scoreboard {
     text-align: center;
     margin-left: auto;

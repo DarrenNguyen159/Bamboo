@@ -88,3 +88,10 @@ body {
         background-color: #cbdd6e
     }
 }
+
+#endgame {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}

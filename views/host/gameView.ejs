@@ -29,10 +29,10 @@
               </div>
             </div>
             <div class="row question">
-                <h1 class="h1" style="color:#000;" id="question"></h1> 
+                <h1 class="h1" style="color:#000;" id="question"></h1>
             </div>
 
-            <div class="row question">
+            <div class="row">
                 <img class="questionImage" id="questionImage" alt=""></img> 
             </div>
 
@@ -61,7 +61,7 @@
             <div class="pos-f-t">
               <nav class="navbar navbar-dark bg-dark">
                 <div class="col-md-12 text-center">
-                <h1 class="h1" style="color:#fff;"> Score</h1> 
+                <h1 class="h1" style="color:#fff;" id="question-answer">Score</h1> 
                 </div>
               </nav>
             </div>
@@ -212,7 +212,7 @@
                     $("#questionNumber").html("Question " + questionNumber.toString());
                     $("#question").html(data.question);
                     $("#questionImage").attr('src', data.imageURL);
-                    limit = data.limit;
+                    limit = parseInt(data.limit);
                     currentTime=0;
                     var p = setInterval(function(){
                         var percentage=currentTime/limit*100;
@@ -235,7 +235,7 @@
                         $("#top"+(i+1).toString()).html(data.top[i][0]);
                         $("#score"+(i+1).toString()).html(data.top[i][1]);
                     }
-
+                    var answer = data.answer;
                     var countA = data.countAnswers.a;
                     var countB = data.countAnswers.b;
                     var countC = data.countAnswers.c;
@@ -247,6 +247,7 @@
                     $("#countAnswersB").html(countB);
                     $("#countAnswersC").html(countC);
                     $("#countAnswersD").html(countD);
+                    $("#question-answer").html("The answer is " + answer.toUpperCase());
 
                     $("#countA").css('width',(countA / Total * 100 + 1).toString()+'%');
                     $("#countB").css('width',(countB / Total * 100 + 1).toString()+'%');

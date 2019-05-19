@@ -4,11 +4,21 @@ var database = require('./database');
 
 /* GET test page. */
 router.get('/', function(req, res, next) {
-    database.ref('/Rooms/r001').once('value').then(function(snapshot) {
-        var data = snapshot.val();
-        // console.log(data.players);
-        res.render('test', {room: data});
-    });  
+    for(let i=0; i<1002; i++){
+        let roomId;
+        if(0<=i && i<=9){
+            roomId = "000"+i.toString();
+        }else if(10<=i && i<=99){
+            roomId = "00" + i.toString();
+        }else if(100<=i && i<=999){
+            roomId = "0" + i.toString();
+        }else{
+            roomId = i.toString();
+        }
+
+        database.ref('/Rooms/'+roomId).remove();
+        console.log('[INFO] roomId ', roomId, ' was removed !'); 
+    }
 });
   
 module.exports = router;

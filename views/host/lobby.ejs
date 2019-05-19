@@ -135,6 +135,11 @@
             });
         }
 
+        function create(){
+            console.log('[DEBUG] Navigate to createQuestionPacks');
+            window.location.href = '/createQuestionPacks';
+        }
+
         function getPlayers(uid) {
             socket.emit('lobby', {
                 state: 2,
@@ -165,16 +170,17 @@
                         var childStr = "";
                         if(Object.keys(questionPacks).length >= 1){
                             let key = Object.keys(questionPacks)[0];
-                            $jq("#pack-img").attr('src',"/images/" + key + "/" + questionPacks[key].imageURL);
+                            $jq("#pack-img").attr('src', questionPacks[key].imageURL);
                             $jq("#title").text(questionPacks[key].title);
                             $jq("#packId").text(key);
                             $jq("#description").text(questionPacks[key].description);
                         }
                         for (let key in questionPacks) {
-                            childStr = "<div class=\"card packCard\" id=\"" + key + "\" ><img class=\"card-img-top\" src=\"/images/" + key + "/" + questionPacks[key].imageURL + "\" alt=\"Card image cap\"><div class=\"card-body\"><h5 class=\"card-title\">" + questionPacks[key].title + "</h5></div></div>";
+                            childStr = "<div class=\"card packCard\" id=\"" + key + "\" ><img class=\"card-img-top\" src=\"" + questionPacks[key].imageURL + "\" alt=\"Card image cap\"><div class=\"card-body\"><h5 class=\"card-title\">" + questionPacks[key].title + "</h5></div></div>";
                             parent.append(childStr);
                             $jq("#" + key).click(function(){
-                                $jq("#pack-img").attr('src',"/images/" + key + "/" + questionPacks[key].imageURL);
+                                // $jq("#pack-img").attr('src',"/images/" + key + "/" + questionPacks[key].imageURL);
+                                $jq("#pack-img").attr('src', questionPacks[key].imageURL);
                                 $jq("#title").text(questionPacks[key].title);
                                 $jq("#packId").text(key);
                                 $jq("#description").text(questionPacks[key].description);
