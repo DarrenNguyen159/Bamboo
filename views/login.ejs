@@ -74,7 +74,7 @@
             rurl = '/createQuestionPacks'
         }
         else {
-            rurl = '/lobby/<%= lobbyID %>';
+            rurl = '/';
         }
         // Check user signed-in
         firebase.auth().onAuthStateChanged(function(user) {

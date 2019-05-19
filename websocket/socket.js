@@ -51,7 +51,8 @@ module.exports.setup = function(server){
 							d: rs.d,
 							limit: rs.limit,
 							question: rs.question,
-							questionNumber: info.questionNumber
+							questionNumber: info.questionNumber,
+							imageURL: rs.imageURL
 						});
 						io.sockets.emit('player',{
 							state: 1,

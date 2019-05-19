@@ -19,6 +19,7 @@ module.exports = {
 
     database.ref('/QuestionPacks/q' + questionsPackId + '/questions/question' + questionNumber).once('value').then(function (snapshot) {
       var result = snapshot.val();
+      console.log('[] GET QUESTION', result);
       if(result){
         func(result,{questionNumber:questionNumber});
       }else{

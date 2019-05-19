@@ -6,9 +6,9 @@ var url = require('url');
 
 // /authen
 
-router.get('/:id', function(req, res, next) {
-    var id = req.params['id'];
-    res.render('login', { title: 'Log in', message: "", lobbyID: id });
+router.get('/', function(req, res, next) {
+    // var id = req.params['id'] || "";
+    res.render('login', { title: 'Log in', message: "", lobbyID: "" });
 });
 
 router.get('/create', function(req, res, next) {
