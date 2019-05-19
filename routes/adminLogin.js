@@ -10,7 +10,9 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
+router.get('/',function(req,res){
+  res.redirect('admin/login');
+});
 router.get('/login',function(req,res){
     res.render('admin/login');
 });

@@ -10,12 +10,8 @@
         
         <link rel="stylesheet" type="text/css" href="/style/feedback.css">
         <link rel="stylesheet" type="text/css" href="/style/index.css">
-
-
-
     </head>
-    <body>
-    
+<body>
     <div class="container-fluid">
         <div class="center">
             <h1 class="logo">Bamboo!</h1>
@@ -39,19 +35,23 @@
                     <button class="ButtonEnter" onclick="createLobby()">Create a lobby</button>
                 </div>
             </div>
-        
-            <!-- <body marginwidth="0" marginheight="0"> -->
-                        
-            <!-- </body> -->
         </div>
-        
-        
     </div>
+
+    <body marginwidth="0" marginheight="0">
+        <img src="https://d6tizftlrpuof.cloudfront.net/themes/production/usabilla-button-35d1ced8945d3ee21c46cef387cc3615.png" width="40" height="131" id="myBtn">
+            
+    </body>
+    <%- include feedback.ejs %>
+    
     
     <div class="footer">
         <a href="#">Terms & Privacy</a>
     </div>
   
+</body>
+
+    
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
@@ -70,7 +70,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src="/javascript/config.js"></script>
-    <!-- <script src="/javascript/feedback.js"></script> -->
+    <script src="/javascript/feedback.js"></script>
 
     <script>
         var $jq = jQuery.noConflict();
