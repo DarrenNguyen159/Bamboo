@@ -286,7 +286,7 @@
                 let b = $jq(this).find(".B").val();
                 let c = $jq(this).find(".C").val();
                 let d = $jq(this).find(".D").val();
-                let answer = $jq(this).find(".answer").val();
+                let answer = $jq(this).find(".answer").val().toLowerCase();
                 let limitText = $jq(this).find(".limit").val();
                 let limit = parseInt(limitText);
                 if (limit < 5) {
@@ -297,14 +297,14 @@
                     alert("Limit time is not set at question " + index + " can't be " + limit);
                     validTimeLimit = false;
                 }
-                questions['question' + index] = {
+                questions['question' + (index + 1)] = {
                     question: question,
                     imageURL: imageURL,
                     a: a,
                     b: b,
                     c: c,
                     d: d,
-                    limit: limitText,
+                    limit: limit,
                     answer: answer,
                     status: 'end',
                 };
@@ -318,9 +318,9 @@
 
             json = {
                 title: title,
-                author: {
+                authors: {
                     name: uname,
-                    authorid: ucode
+                    authorid1: ucode
                 },
                 imageURL: packImageURL,
                 description: description,
