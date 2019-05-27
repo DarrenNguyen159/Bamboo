@@ -169,9 +169,9 @@
                         var parent = $jq("#questionPacks");
                         var childStr = "";
 
-                        if (!questionPacks[0]) {
+                        if (questionPacks.length==0) {
                             alert("You don't have a question pack yet!\n Create one now!");
-                            // redirect to creatQuestionPack
+                            // // redirect to creatQuestionPack
                             window.location.href = '/createQuestionPacks/<%= lobbyID %>';
                         }
 
