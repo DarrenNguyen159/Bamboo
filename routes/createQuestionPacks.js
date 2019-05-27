@@ -12,8 +12,9 @@ var options = {
 	signed: false // Indicates if the cookie should be signed
 }
 
-router.get('/', function(req,res,next){
-	res.render('host/createQuestionPacks');
+router.get('/:id', function(req,res,next){
+	var lobbyId = req.params['id'];
+	res.render('host/createQuestionPacks', {lobbyId:lobbyId});
 });
 
 module.exports = router;

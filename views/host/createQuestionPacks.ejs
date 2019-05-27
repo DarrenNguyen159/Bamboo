@@ -31,7 +31,7 @@
                 <div class="card">
                     <img src="./images/no-image-available.jpg" class="card-img-top" id="image" alt="..." onclick="setImage()">
                     <input accept=”.png” type='file' id="imgInp" hidden/>
-                    <span id="imageUrl"></span>
+                    <span id="imageUrl" hidden></span>
                     <div class="card-body">
                         <!-- <h5 class="card-title">Card title</h5> -->
                         <div class="input-group mb-3">
@@ -197,6 +197,15 @@
             }
         });
 
+        function back() {
+            var lobbyId = "<%= lobbyId %>";
+            if (lobbyId == "") {
+                // back to index
+                window.location.href = '/';    
+            }
+            window.location.href = '/lobby/<%= lobbyId %>';
+        }
+
         function setImage() {
             $jq('#imgInp').click();
         }
@@ -336,7 +345,7 @@
                 $jq("#loading-animation").hide();
                 var json = CheckAndGet();
                 if (json != false) {
-                    alert(JSON.stringify(json));
+                    // alert(JSON.stringify(json));
                 }
 
                 $jq.ajax({

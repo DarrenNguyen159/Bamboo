@@ -40,11 +40,11 @@
                         </div>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <div class="input-group-prepend">
+                                <!-- <div class="input-group-prepend">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="search()">Search</button>
                                 </div>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control"> -->
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="create()">Create</button>
@@ -137,7 +137,7 @@
 
         function create(){
             console.log('[DEBUG] Navigate to createQuestionPacks');
-            window.location.href = '/createQuestionPacks';
+            window.location.href = '/createQuestionPacks/<%= lobbyID %>';
         }
 
         function getPlayers(uid) {
@@ -168,6 +168,13 @@
                         var questionPacks = data.questionPacks;
                         var parent = $jq("#questionPacks");
                         var childStr = "";
+
+                        if (!questionPacks[0]) {
+                            alert("You don't have a question pack yet!\n Create one now!");
+                            // redirect to creatQuestionPack
+                            window.location.href = '/createQuestionPacks/<%= lobbyID %>';
+                        }
+
                         if(Object.keys(questionPacks).length >= 1){
                             let key = Object.keys(questionPacks)[0];
                             $jq("#pack-img").attr('src', questionPacks[key].imageURL);
