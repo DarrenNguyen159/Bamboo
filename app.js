@@ -39,7 +39,7 @@ app.use('/lobby', require('./routes/lobby'));
 app.use('/player', require('./routes/player'));
 app.use('/host', require('./routes/host'));
 app.use('/createQuestionPacks', require('./routes/createQuestionPacks'));
-app.use('/cleanDb', require('./routes/testPage'));
+app.use('/cleanDb', require('./routes/cleanDb'));
 
 // API
 app.use('/newLobby', require('./api/newLobby'));
