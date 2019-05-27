@@ -16,9 +16,18 @@ router.get('/', function(req, res, next) {
             roomId = i.toString();
         }
 
-        database.ref('/Rooms/'+roomId).remove();
+        database.ref('/Rooms/r'+roomId).remove();
         console.log('[INFO] roomId ', roomId, ' was removed !'); 
     }
+
+    res.json({
+        status: 'processing',
+        range: [
+            'r0000',
+            'r0999'
+        ]
+    })
+
 });
   
 module.exports = router;
