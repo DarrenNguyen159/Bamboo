@@ -25,16 +25,24 @@ body {
     margin: auto;
     width: 50%;
     background-color: white;
-    border: 0.2rem black solid;
+    border-radius: 0.5rem;
+
+    -webkit-box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
+    -moz-box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
+    box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
+
 }
 
 .ButtonEnter {
+    border-radius: 0.5rem;
     text-align: center;
     margin: auto;
     width: 50%;
-    color: white;
-    background-color: green;
-    border: 0.2rem black solid;
+    color: black;
+    background-color: white;
+    -webkit-box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
+    -moz-box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
+    box-shadow: 0px 10px 16px 1px rgba(0,0,0,0.65);
 }
 
 .ButtonEnter:hover {
