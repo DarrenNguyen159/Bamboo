@@ -165,3 +165,8 @@ body {
     right:-1px;
 }
 #myBtn:hover{background:#030;border:1px solid #030;}
+.btn-group-lg>.btn, .btn-lg{
+    float: right;    
+    background: #79c879;
+    color: white;
+}

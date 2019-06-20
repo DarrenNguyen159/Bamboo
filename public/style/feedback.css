@@ -45,7 +45,7 @@
   float: none;
   text-align: left;
   width: 100%;
-
+  font-weight: bold;
   }
 
   .form-line {
@@ -144,7 +144,7 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 50px; /* Location of the box */
+    padding-top: 19px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -158,7 +158,7 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 572px;
+    width: 775px;
   }
   
   /* The Close Button */
@@ -167,6 +167,7 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    text-align: right;
   }
   
   .close:hover,
@@ -179,7 +180,7 @@
       color: #ffff55;
   }
   .form-textarea{
-    width: 530px;
+    width: 100%;
 }
 
 .pagination > ul {
@@ -264,6 +265,7 @@ ul {
 .pagination li > a:active,
 .pagination li > span:active {
   background-color: #1abc9c;
+
   color: white;
 }
 /* #errorAlert {
@@ -284,4 +286,7 @@ ul {
 }
 .pagination {  
   margin: 10px 0;
+}
+label{
+  font-weight: bold;
 }
