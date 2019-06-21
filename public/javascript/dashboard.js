@@ -36,9 +36,12 @@ playersRef.on("child_added", function(data, prevChildKey) {
     var feedbacklist = $jq("#feedbacklist");
     var email = newPlayer.email;
     listemail.push(email);
-    
-
     let childStr = "";
+
+    if (!data.exists()) {
+      childStr = "<div> We don't have any feedback </div>";
+      // Do stuff        
+    } else {
   //  for (var key in players) {
 
       childStr = "<div class=\"col-lg-3 col-md-4 col-sm-6 mb-4\">"+
@@ -53,6 +56,7 @@ playersRef.on("child_added", function(data, prevChildKey) {
         "</div>"+
       "</div>"+
     "</div>";
+    }
       // childStr += "<li class=\"badge badge-success\">" + newPlayer.point + "   " + newPlayer.message + "</li>";
   // }
   feedbacklist.append(childStr);
