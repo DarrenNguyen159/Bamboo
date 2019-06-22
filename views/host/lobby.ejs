@@ -169,7 +169,7 @@
                         var parent = $jq("#questionPacks");
                         var childStr = "";
 
-                        if (questionPacks.length==0) {
+                        if (Object.keys(questionPacks).length==0) {
                             alert("You don't have a question pack yet!\n Create one now!");
                             // // redirect to creatQuestionPack
                             window.location.href = '/createQuestionPacks/<%= lobbyID %>';
